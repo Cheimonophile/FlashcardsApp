@@ -1,14 +1,5 @@
 part of flashcards_app.backend.data_access;
 
-// import 'dart:convert';
-// import 'dart:io';
-
-// import 'package:file_picker/file_picker.dart';
-// import 'package:flashcards_app/src/data/config.dart';
-// import 'package:flashcards_app/src/data/deck.dart';
-// import 'package:path/path.dart' as path;
-// import 'package:path_provider/path_provider.dart';
-
 // constants
 const String deckExtension = "deck";
 const String deckDirSuffix = "Decks";

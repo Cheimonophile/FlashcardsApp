@@ -5,14 +5,39 @@ import 'package:flutter/material.dart';
 import 'src/frontend/deck_selection_screen.dart';
 
 void main() {
-  runApp(const FlashcardsApp());
+  runApp(FlashcardsApp());
 }
 
 class FlashcardsApp extends StatelessWidget {
-  const FlashcardsApp({super.key});
+  FlashcardsApp({super.key}) {
+    Dao.init();
+  }
+
+  @override
+  Widget build(BuildContext context) => MaterialApp(
+        theme: ThemeData(brightness: Brightness.light),
+        darkTheme: ThemeData(brightness: Brightness.dark),
+        home: const AppHome()
+      );
+}
+
+class AppHome extends StatefulWidget {
+  const AppHome({Key? key}) : super(key: key);
+
+  @override
+  State<AppHome> createState() => _AppHomeState();
+}
+
+class _AppHomeState extends State<AppHome> {
+
+  _AppHomeState() {
+    Dao.init(onLoad: () {
+      setState((){});
+    });
+  }
 
   @override
   Widget build(BuildContext context) => Dao.ready
-      ? const MaterialApp(home: CircularProgressIndicator())
-      : const MaterialApp(home: DeckSelectionScreen());
+      ? const DeckSelectionScreen()
+      : const Scaffold(body: Center(child: CircularProgressIndicator()));
 }
