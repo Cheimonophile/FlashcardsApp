@@ -3,7 +3,7 @@ library flashcards_app.backend.deck_dashboard;
 
 import 'dart:io';
 
-import 'package:flashcards_app/src/backend/application_data_access.dart';
+import 'package:flashcards_app/src/backend/app_data_access.dart';
 import 'package:flashcards_app/src/frontend/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';

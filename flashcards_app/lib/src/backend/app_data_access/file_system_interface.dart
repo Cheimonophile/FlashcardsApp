@@ -1,4 +1,4 @@
-part of flashcards_app.backend.application_data_access;
+part of flashcards_app.backend.app_data_access;
 
 // constants
 const String deckExtension = "deck";

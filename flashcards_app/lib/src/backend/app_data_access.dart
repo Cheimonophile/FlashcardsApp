@@ -1,4 +1,4 @@
-library flashcards_app.backend.application_data_access;
+library flashcards_app.backend.app_data_access;
 
 
 import 'dart:async';
@@ -11,7 +11,7 @@ import 'package:flashcards_app/src/data/deck.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 
-part "file_system_interface.dart";
+part 'app_data_access/file_system_interface.dart';
 
 
 abstract class AppDao {

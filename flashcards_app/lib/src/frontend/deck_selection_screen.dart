@@ -3,7 +3,7 @@ library flashcards_app.backend.deck_selection_screen;
 import 'dart:convert';
 
 import 'package:desktop_drop/desktop_drop.dart';
-import 'package:flashcards_app/src/backend/data_access.dart';
+import 'package:flashcards_app/src/backend/app_data_access.dart';
 import 'package:flashcards_app/src/data/config.dart';
 import 'package:flashcards_app/src/data/deck.dart';
 import 'package:flutter/material.dart';
