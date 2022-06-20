@@ -21,56 +21,43 @@ class DeckSelectionScreen extends StatefulWidget {
 
 class _DeckSelectionScreenState extends State<DeckSelectionScreen> {
   // state
-  late Dao dao = Dao(() => setState(() {}));
   int disabled = 0;
 
   // constructor
   _DeckSelectionScreenState();
 
   /// function that locks the ui while performing operations
-  void action(Future Function() f) {
+  Future<T> _action<T>(Future<T> Function() f) async {
     setState(() => disabled++);
-    f().catchError((e) {
+    return f().catchError((e) {
       Dialogs.alert(context, e.toString());
     }).whenComplete(() {
       setState(() => disabled--);
     });
   }
 
-  /// Executes when the import button is pressed
-  ///
-  /// Lets the user find a file on their operating system
-  void onPressedImportDeckButton() => action(dao.importDeckFile);
+  /// callback when a file is dragged into the frame
+  /// 
+  /// Returns a Widget that should be pushed onto the navigator
+  _onFilesDragged(DropDoneDetails details) => _action(() async {
+    if(details.files.isEmpty) {
+      Dialogs.alert(context, "Not enough files dropped");
+      return null;
+    }
+    if(details.files.length > 1) {
+      Dialogs.alert(context, "Too many files dropped");
+      return null;
+    }
+    var fileString = await details.files[0].readAsString();
+    var deck = Deck.fromJson(jsonDecode(fileString));
 
-  /// Creates a new deckfile when the new button is pressed
-  void onPressedNewDeckButton() => action(dao.newDeckFile);
-
-  /// Deletes the deckfile when the new button is pressed
-  void onPressedDeleteDeckButton(String deckName) => action(() async {
-        var hasPermission = await Dialogs.permission(
-            context, "Is it alright to delete deck '$deckName'?");
-        if (hasPermission != null && hasPermission) {
-          await dao.deleteDeckFile(deckName);
-        }
-      });
-
-  /// Tries to go to the next screen when a deck has been selected
-  void onPressedDeckButton(BuildContext context, String deckFileName) async {
-    dao.openDeckFile(deckFileName).then((deck) {
-      if(deck != null) {
-        Navigator.push(context, MaterialPageRoute(
-          builder: (_) => DeckDashboard(deckFileName, deck),
-        ));
-      }
-      setState((){});
+    return Future(() {
+      Navigator.push(context, MaterialPageRoute(
+        builder: (_) => DeckDashboard(details.files[0].path, deck),
+      ));
     });
-  }
-
-  /// a map of the buttons that will appear on the bottom bar and their functions
-  late final bottomButtons = {
-    "Import Deck": onPressedImportDeckButton,
-    "New Deck": onPressedNewDeckButton,
-  };
+  });
+  
 
   @override
   Widget build(BuildContext context) {
@@ -79,56 +66,14 @@ class _DeckSelectionScreenState extends State<DeckSelectionScreen> {
       child: Scaffold(
         appBar: AppBar(title: const Text("Decks")),
         body: DropTarget(
-          onDragDone: (details) {
-            details.files[0].readAsString().then((fileString) {
-              var deck = Deck.fromJson(jsonDecode(fileString));
-              Navigator.push(context, MaterialPageRoute(
-                builder: (_) => DeckDashboard(details.files[0].path, deck),
-              ));
-            });
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(32.0),
+          onDragDone: _onFilesDragged,
+          child: const Padding(
+            padding: EdgeInsets.all(32.0),
             child: Center(
-              child: ListView(
-                children: dao.config?.deckFiles
-                        .map((deckName) => Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                children: [
-                                  OutlinedButton(
-                                    onPressed: () =>
-                                        onPressedDeleteDeckButton(deckName),
-                                    child: Container(
-                                      alignment: Alignment.centerLeft,
-                                      child: const Text("Remove",
-                                          style: TextStyle(color: Colors.red)),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: TextButton(
-                                      onPressed: () =>
-                                          onPressedDeckButton(context, deckName),
-                                      child: Container(
-                                          alignment: Alignment.centerLeft,
-                                          child: Text(deckName)),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ))
-                        .toList() ??
-                    [const CircularProgressIndicator()],
-              ),
+              child: Text("Drag deckfile to open")
             ),
           ),
         ),
-        persistentFooterButtons: bottomButtons.entries.map((entry) => Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: OutlinedButton(
-                onPressed: entry.value,
-                child: Text(entry.key)),
-          )).toList(),
       ),
     );
   }

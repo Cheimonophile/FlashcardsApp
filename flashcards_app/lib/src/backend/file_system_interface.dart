@@ -107,6 +107,11 @@ abstract class FSI {
     return config;
   }
 
+  /// saves a file
+  static Future saveFile(String path, String data) async {
+    await File(path).writeAsString(data);
+  }
+
   /// imports a a deckfile
   static Future<String?> importDeckFile() async {
     var oldPath = await pickDeckFile();
@@ -130,11 +135,11 @@ abstract class FSI {
   }
 
   /// gets the deck folder
-  static Future<Directory> _getDir(_Dir dir) async {
+  static Future<Directory> _getDir(_Dir dirSuffix) async {
     var appDir = await getApplicationDocumentsDirectory();
-    var deckDir = Directory(path.join(appDir.path, _dirNames[dir]));
-    if(!deckDir.existsSync()) deckDir.createSync(recursive: true);
-    return deckDir;
+    var dir = Directory(path.join(appDir.path, _dirNames[dirSuffix]));
+    if(!dir.existsSync()) dir.createSync(recursive: true);
+    return dir;
   }
 }
 
