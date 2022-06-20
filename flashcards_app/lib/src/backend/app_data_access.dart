@@ -5,9 +5,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:desktop_drop/desktop_drop.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flashcards_app/src/data/config.dart';
+import 'package:flashcards_app/src/backend/deck_data_access.dart';
 import 'package:flashcards_app/src/data/deck.dart';
+import 'package:flashcards_app/src/data/config.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 
@@ -57,9 +59,20 @@ abstract class AppDao {
   });
 
   /// saves a deck file
-  static Future saveDeck(String path, Deck deck) => _edit(() async {
-    var deckJson = jsonEncode(deck.toJson());
+  static Future saveDeck(String path, DeckDao deckDao) => _edit(() async {
+    var deckJson = jsonEncode(deckDao.getJson());
     _FSI.saveFile(path, deckJson);
+  });
+
+  /// Opens deckfiles from a file drop
+  static Future<List<DeckDao>?> deckDrop(DropDoneDetails details) => _edit(() async {
+    var deckDaoFutures = details.files.map((file) async {
+      var fileString = await file.readAsString();
+      var deck = Deck.fromJson(jsonDecode(fileString));
+      var deckDao = DeckDao(deck);
+      return deckDao;
+    }).toList();
+    return Future.wait(deckDaoFutures);
   });
 
   /// imports a new deck file

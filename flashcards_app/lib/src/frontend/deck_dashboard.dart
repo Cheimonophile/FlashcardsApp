@@ -4,6 +4,7 @@ library flashcards_app.backend.deck_dashboard;
 import 'dart:io';
 
 import 'package:flashcards_app/src/backend/app_data_access.dart';
+import 'package:flashcards_app/src/backend/deck_data_access.dart';
 import 'package:flashcards_app/src/frontend/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -18,10 +19,10 @@ import 'package:path/path.dart' as p;
 
 
 class DeckDashboard extends StatefulWidget {
-  const DeckDashboard(this.path, this.deck, {super.key});
+  const DeckDashboard(this.path, this.deckDao, {super.key});
 
   final String path;
-  final Deck deck;
+  final DeckDao deckDao;
 
   @override
   State<DeckDashboard> createState() => _DeckDashboardState();
@@ -45,7 +46,7 @@ class _DeckDashboardState extends State<DeckDashboard> {
 
   /// save the file
   Future _saveDeck() => _action(() async {
-    await AppDao.saveDeck(widget.path, widget.deck);
+    await AppDao.saveDeck(widget.path, widget.deckDao);
   });
 
   /// function that determines whether or not the scope can be popped

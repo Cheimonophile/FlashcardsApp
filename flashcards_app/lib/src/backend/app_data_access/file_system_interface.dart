@@ -41,30 +41,30 @@ abstract class _FSI {
   }
 
   /// creates a new directory and returns its path
-  static Future<String?> createDeckFile() async {
-    String? result = await FilePicker.platform.saveFile(
-      type: FileType.custom,
-      allowedExtensions: [deckExtension],
-      lockParentWindow: true
-    );
-    if(result != null) {
-      var deckFile = createAndOpen(result);
-      var deck = Deck();
-      await deckFile.writeAsString(jsonEncode(deck.toJson()));
-    }
-    return result;
-  }
+  // static Future<String?> createDeckFile() async {
+  //   String? result = await FilePicker.platform.saveFile(
+  //     type: FileType.custom,
+  //     allowedExtensions: [deckExtension],
+  //     lockParentWindow: true
+  //   );
+  //   if(result != null) {
+  //     var deckFile = createAndOpen(result);
+  //     var deck = Deck();
+  //     await deckFile.writeAsString(jsonEncode(deck.toJson()));
+  //   }
+  //   return result;
+  // }
 
 
   /// opens a a deckfile
-  static Future<Deck?> loadDeckFile(String deckFileName) async {
-    var decksDir = await _getDir(_Dir.decks);
-    var deckFilePath = path.join(decksDir.path, deckFileName);
-    var deckFile = File(deckFilePath);
-    var fileString = deckFile.readAsStringSync();
-    var deck = Deck.fromJson(jsonDecode(fileString));
-    return deck;
-  }
+  // static Future<Deck?> loadDeckFile(String deckFileName) async {
+  //   var decksDir = await _getDir(_Dir.decks);
+  //   var deckFilePath = path.join(decksDir.path, deckFileName);
+  //   var deckFile = File(deckFilePath);
+  //   var fileString = deckFile.readAsStringSync();
+  //   var deck = Deck.fromJson(jsonDecode(fileString));
+  //   return deck;
+  // }
 
   /// writes the config object
   static Future saveConfig(Config config) async {

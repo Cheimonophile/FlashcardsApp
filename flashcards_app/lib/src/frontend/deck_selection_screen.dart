@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flashcards_app/src/backend/app_data_access.dart';
+import 'package:flashcards_app/src/backend/deck_data_access.dart';
 import 'package:flashcards_app/src/data/config.dart';
 import 'package:flashcards_app/src/data/deck.dart';
 import 'package:flutter/material.dart';
@@ -39,20 +40,19 @@ class _DeckSelectionScreenState extends State<DeckSelectionScreen> {
   /// 
   /// Returns a Widget that should be pushed onto the navigator
   _onFilesDragged(DropDoneDetails details) => _action(() async {
-    if(details.files.isEmpty) {
-      Dialogs.alert(context, "Not enough files dropped");
-      return null;
+    var deckDaos = await AppDao.deckDrop(details);
+    if(deckDaos == null) {
+      throw Exception("Something went wrong opening the deckfiles");
+    }
+    if(deckDaos.isEmpty) {
+      throw Exception("Not enough files dropped");
     }
     if(details.files.length > 1) {
-      Dialogs.alert(context, "Too many files dropped");
-      return null;
+      throw Exception("Too many files dropped");
     }
-    var fileString = await details.files[0].readAsString();
-    var deck = Deck.fromJson(jsonDecode(fileString));
-
     return Future(() {
       Navigator.push(context, MaterialPageRoute(
-        builder: (_) => DeckDashboard(details.files[0].path, deck),
+        builder: (_) => DeckDashboard(details.files[0].path, deckDaos[0]),
       ));
     });
   });
