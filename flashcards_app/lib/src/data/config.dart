@@ -2,7 +2,6 @@ library flashcards_app.data.config;
 
 import 'dart:convert';
 
-import 'package:flashcards_app/src/backend/file_system_interface.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'package:path/path.dart' as path;

@@ -1,13 +1,4 @@
-library flashcards_app.backend.file_system_interface;
-
-import 'dart:convert';
-import 'dart:io';
-
-import 'package:file_picker/file_picker.dart';
-import 'package:flashcards_app/src/data/config.dart';
-import 'package:flashcards_app/src/data/deck.dart';
-import 'package:path/path.dart' as path;
-import 'package:path_provider/path_provider.dart';
+part of flashcards_app.backend.app_data_access;
 
 // constants
 const String deckExtension = "deck";
@@ -25,7 +16,7 @@ const _dirNames = {
 };
 
 /// namespace for FSI
-abstract class FSI {
+abstract class _FSI {
 
   /// Picks a file using the OS file picker
   static Future<String?> pickDeckFile() async {
@@ -50,30 +41,30 @@ abstract class FSI {
   }
 
   /// creates a new directory and returns its path
-  static Future<String?> createDeckFile() async {
-    String? result = await FilePicker.platform.saveFile(
-      type: FileType.custom,
-      allowedExtensions: [deckExtension],
-      lockParentWindow: true
-    );
-    if(result != null) {
-      var deckFile = createAndOpen(result);
-      var deck = Deck();
-      await deckFile.writeAsString(jsonEncode(deck.toJson()));
-    }
-    return result;
-  }
+  // static Future<String?> createDeckFile() async {
+  //   String? result = await FilePicker.platform.saveFile(
+  //     type: FileType.custom,
+  //     allowedExtensions: [deckExtension],
+  //     lockParentWindow: true
+  //   );
+  //   if(result != null) {
+  //     var deckFile = createAndOpen(result);
+  //     var deck = Deck();
+  //     await deckFile.writeAsString(jsonEncode(deck.toJson()));
+  //   }
+  //   return result;
+  // }
 
 
   /// opens a a deckfile
-  static Future<Deck?> loadDeckFile(String deckFileName) async {
-    var decksDir = await _getDir(_Dir.decks);
-    var deckFilePath = path.join(decksDir.path, deckFileName);
-    var deckFile = File(deckFilePath);
-    var fileString = deckFile.readAsStringSync();
-    var deck = Deck.fromJson(jsonDecode(fileString));
-    return deck;
-  }
+  // static Future<Deck?> loadDeckFile(String deckFileName) async {
+  //   var decksDir = await _getDir(_Dir.decks);
+  //   var deckFilePath = path.join(decksDir.path, deckFileName);
+  //   var deckFile = File(deckFilePath);
+  //   var fileString = deckFile.readAsStringSync();
+  //   var deck = Deck.fromJson(jsonDecode(fileString));
+  //   return deck;
+  // }
 
   /// writes the config object
   static Future saveConfig(Config config) async {
@@ -81,7 +72,7 @@ abstract class FSI {
     // load the config file
     var appDir = await getApplicationDocumentsDirectory();
     var configPath = path.join(appDir.path, configFilename);
-    var configFile = FSI.createAndOpen(configPath);
+    var configFile = createAndOpen(configPath);
 
     // write to the config file
     await configFile.writeAsString(jsonEncode(config.toJson()));
@@ -93,7 +84,7 @@ abstract class FSI {
     // read the config file the config file
     var appDir = await getApplicationDocumentsDirectory();
     var configPath = path.join(appDir.path, configFilename);
-    var configFile = FSI.createAndOpen(configPath);
+    var configFile = createAndOpen(configPath);
     var configJson = await configFile.readAsString();
 
     // generate the config object

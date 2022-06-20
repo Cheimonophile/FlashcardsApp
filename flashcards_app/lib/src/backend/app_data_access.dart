@@ -1,15 +1,22 @@
-library flashcards_app.backend.data_access;
+library flashcards_app.backend.app_data_access;
 
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
-import 'package:flashcards_app/src/backend/file_system_interface.dart';
-import 'package:flashcards_app/src/data/config.dart';
+import 'package:desktop_drop/desktop_drop.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flashcards_app/src/backend/deck_data_access.dart';
 import 'package:flashcards_app/src/data/deck.dart';
+import 'package:flashcards_app/src/data/config.dart';
+import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
+
+part 'app_data_access/file_system_interface.dart';
 
 
-abstract class Dao {
+abstract class AppDao {
 
   static bool _ready = false;
   static late Config _config;
@@ -17,7 +24,7 @@ abstract class Dao {
   // init the Dao
   static init({Function()? onLoad}) {
     Future.wait([
-      FSI.loadConfig().then((config) => _config = config)
+      _FSI.loadConfig().then((config) => _config = config)
     ]).then((r) {
       if(onLoad != null) {
         onLoad();
@@ -33,7 +40,7 @@ abstract class Dao {
   /// edit function to make sure everything is up to date
   static Future<T?> _edit<T>(Future<T> Function() f) async {
     return f().then((value) {
-      FSI.saveConfig(_config);
+      _FSI.saveConfig(_config);
       return value;
     });
   }
@@ -45,16 +52,27 @@ abstract class Dao {
 
   /// imports a new deck file
   static Future importDeckFile() => _edit(() async {
-    var deckFileName = await FSI.importDeckFile();
+    var deckFileName = await _FSI.importDeckFile();
     if (deckFileName != null) {
       _config.addDeckFile(deckFileName);
     }
   });
 
   /// saves a deck file
-  static Future saveDeck(String path, Deck deck) => _edit(() async {
-    var deckJson = jsonEncode(deck.toJson());
-    FSI.saveFile(path, deckJson);
+  static Future saveDeck(String path, DeckDao deckDao) => _edit(() async {
+    var deckJson = jsonEncode(deckDao.getJson());
+    _FSI.saveFile(path, deckJson);
+  });
+
+  /// Opens deckfiles from a file drop
+  static Future<List<DeckDao>?> deckDrop(DropDoneDetails details) => _edit(() async {
+    var deckDaoFutures = details.files.map((file) async {
+      var fileString = await file.readAsString();
+      var deck = Deck.fromJson(jsonDecode(fileString));
+      var deckDao = DeckDao(deck);
+      return deckDao;
+    }).toList();
+    return Future.wait(deckDaoFutures);
   });
 
   /// imports a new deck file
