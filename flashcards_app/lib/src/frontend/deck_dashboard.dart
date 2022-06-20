@@ -3,7 +3,7 @@ library flashcards_app.backend.deck_dashboard;
 
 import 'dart:io';
 
-import 'package:flashcards_app/src/backend/data_access.dart';
+import 'package:flashcards_app/src/backend/application_data_access.dart';
 import 'package:flashcards_app/src/frontend/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -45,7 +45,7 @@ class _DeckDashboardState extends State<DeckDashboard> {
 
   /// save the file
   Future _saveDeck() => _action(() async {
-    await Dao.saveDeck(widget.path, widget.deck);
+    await AppDao.saveDeck(widget.path, widget.deck);
   });
 
   /// function that determines whether or not the scope can be popped

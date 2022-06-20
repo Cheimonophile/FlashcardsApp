@@ -1,4 +1,4 @@
-library flashcards_app.backend.data_access;
+library flashcards_app.backend.application_data_access;
 
 
 import 'dart:async';
@@ -14,7 +14,7 @@ import 'package:path_provider/path_provider.dart';
 part "file_system_interface.dart";
 
 
-abstract class Dao {
+abstract class AppDao {
 
   static bool _ready = false;
   static late Config _config;

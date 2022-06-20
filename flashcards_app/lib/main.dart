@@ -1,17 +1,16 @@
 library flashcards_app;
 
-import 'package:flashcards_app/src/backend/data_access.dart';
+import 'package:flashcards_app/src/backend/application_data_access.dart';
+import 'package:flashcards_app/src/frontend/deck_selection_screen.dart';
 import 'package:flutter/material.dart';
 import 'src/frontend/deck_selection_screen.dart';
 
 void main() {
-  runApp(FlashcardsApp());
+  runApp(const FlashcardsApp());
 }
 
 class FlashcardsApp extends StatelessWidget {
-  FlashcardsApp({super.key}) {
-    Dao.init();
-  }
+  const FlashcardsApp({super.key});
 
   @override
   Widget build(BuildContext context) => MaterialApp(
@@ -31,13 +30,13 @@ class AppHome extends StatefulWidget {
 class _AppHomeState extends State<AppHome> {
 
   _AppHomeState() {
-    Dao.init(onLoad: () {
+    AppDao.init(onLoad: () {
       setState((){});
     });
   }
 
   @override
-  Widget build(BuildContext context) => Dao.ready
+  Widget build(BuildContext context) => AppDao.ready
       ? const DeckSelectionScreen()
       : const Scaffold(body: Center(child: CircularProgressIndicator()));
 }
