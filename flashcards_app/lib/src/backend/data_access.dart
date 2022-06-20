@@ -3,10 +3,15 @@ library flashcards_app.backend.data_access;
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
-import 'package:flashcards_app/src/backend/file_system_interface.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flashcards_app/src/data/config.dart';
 import 'package:flashcards_app/src/data/deck.dart';
+import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
+
+part "file_system_interface.dart";
 
 
 abstract class Dao {
@@ -17,7 +22,7 @@ abstract class Dao {
   // init the Dao
   static init({Function()? onLoad}) {
     Future.wait([
-      FSI.loadConfig().then((config) => _config = config)
+      _FSI.loadConfig().then((config) => _config = config)
     ]).then((r) {
       if(onLoad != null) {
         onLoad();
@@ -33,7 +38,7 @@ abstract class Dao {
   /// edit function to make sure everything is up to date
   static Future<T?> _edit<T>(Future<T> Function() f) async {
     return f().then((value) {
-      FSI.saveConfig(_config);
+      _FSI.saveConfig(_config);
       return value;
     });
   }
@@ -45,7 +50,7 @@ abstract class Dao {
 
   /// imports a new deck file
   static Future importDeckFile() => _edit(() async {
-    var deckFileName = await FSI.importDeckFile();
+    var deckFileName = await _FSI.importDeckFile();
     if (deckFileName != null) {
       _config.addDeckFile(deckFileName);
     }
@@ -54,7 +59,7 @@ abstract class Dao {
   /// saves a deck file
   static Future saveDeck(String path, Deck deck) => _edit(() async {
     var deckJson = jsonEncode(deck.toJson());
-    FSI.saveFile(path, deckJson);
+    _FSI.saveFile(path, deckJson);
   });
 
   /// imports a new deck file

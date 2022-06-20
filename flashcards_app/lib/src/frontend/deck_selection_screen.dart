@@ -4,7 +4,6 @@ import 'dart:convert';
 
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flashcards_app/src/backend/data_access.dart';
-import 'package:flashcards_app/src/backend/file_system_interface.dart';
 import 'package:flashcards_app/src/data/config.dart';
 import 'package:flashcards_app/src/data/deck.dart';
 import 'package:flutter/material.dart';
