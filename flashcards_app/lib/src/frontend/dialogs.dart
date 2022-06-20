@@ -38,6 +38,33 @@ class Dialogs {
     )
   );
 
+  /// alerts the user that something has happened
+  /// 
+  /// Yes => true
+  /// No => false
+  /// Cancel => null
+  static Future<bool?> yesNoCancel(BuildContext context, String message) => showDialog<bool>(
+    context: context,
+    barrierDismissible: false,
+    builder: (context) => AlertDialog(
+      content: Text(message),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () => Navigator.pop(context, true),
+          child: const Text("Yes"),
+        ),
+        TextButton(
+          onPressed: () => Navigator.pop(context, false),
+          child: const Text("No"),
+        ),
+        TextButton(
+          onPressed: () => Navigator.pop(context, null),
+          child: const Text("Cancel"),
+        )
+      ]
+    )
+  );
+
 
 
 

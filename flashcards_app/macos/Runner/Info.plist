@@ -28,5 +28,9 @@
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>CFBundleTypeExtensions</key>
+	<array>
+			<string>deck</string>
+	</array>
 </dict>
 </plist>
