@@ -7,7 +7,14 @@ class DeckDao {
   final Deck _deck;
   DeckDao(this._deck);
 
-  Deck get deck => _deck.clone;
+  // getters
+  List<MetaCard> cards() => _deck.cards
+      .asMap()
+      .entries
+      .map((entry) => MetaCard(entry.key, entry.value))
+      .toList();
+
+  // Deck get deck => _deck.clone;
 
   /// accessors
   Iterable<T> mapCards<T>(T Function(int index, Card card) f) =>
@@ -17,4 +24,11 @@ class DeckDao {
 
   /// Json Serialization
   String getJson() => jsonEncode(_deck.toJson());
+}
+
+/// stores a card along with some metadata
+class MetaCard {
+  final int index;
+  final Card card;
+  MetaCard(this.index, this.card);
 }

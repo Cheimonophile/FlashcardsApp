@@ -20,45 +20,38 @@ class _CardsTableState extends State<_CardsTable> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    var cardsMap = widget.deckDao.deck.cards.asMap();
-    return Container(
-      child: Column(
-        children: [
-          // search bar
-          Row(
-            children: [
-              // search bar text
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    controller: searchController,
-                    decoration: VisUtil.inputDecoration,
+  Widget build(BuildContext context) => Container(
+        child: Column(
+          children: [
+            // search bar
+            Row(
+              children: [
+                // search bar text
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      controller: searchController,
+                      decoration: VisUtil.inputDecoration,
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          const Divider(),
-          // table
-          Expanded(
-            child: ListView.builder(
-                itemCount: widget.deckDao.deck.cards.length,
-                itemBuilder: (context, index) {
-              var card = cardsMap[index];
-              return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: card == null
-                      ? Text("No card #${index + 1}")
-                      : TextButton(
+              ],
+            ),
+            const Divider(),
+            // table
+            Expanded(
+              child: ListView(
+                children: widget.deckDao
+                    .cards()
+                    .map((metaCard) => TextButton(
                           onPressed: () {},
-                          child: Text(card.frontText),
-                        ));
-            }),
-          ),
-        ],
-      ),
-    );
-  }
+                          child: Text(metaCard.card.frontText),
+                        ))
+                    .toList(),
+              ),
+            ),
+          ],
+        ),
+      );
 }
