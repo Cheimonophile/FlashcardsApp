@@ -7,14 +7,13 @@ part of flashcards_app.data.deck;
 // **************************************************************************
 
 Deck _$DeckFromJson(Map<String, dynamic> json) => Deck(
-      cards: (json['cards'] as Map<String, dynamic>?)?.map(
-            (k, e) => MapEntry(k, Card.fromJson(e as Map<String, dynamic>)),
-          ) ??
-          const {},
-      tags: (json['tags'] as Map<String, dynamic>?)?.map(
-            (k, e) => MapEntry(k, Tag.fromJson(e as Map<String, dynamic>)),
-          ) ??
-          const {},
+      cards: (json['cards'] as List<dynamic>?)
+              ?.map((e) => Card.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
+      tags:
+          (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList() ??
+              const [],
     );
 
 Map<String, dynamic> _$DeckToJson(Deck instance) => <String, dynamic>{

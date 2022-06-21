@@ -60,7 +60,7 @@ abstract class AppDao {
 
   /// saves a deck file
   static Future saveDeck(String path, DeckDao deckDao) => _edit(() async {
-    var deckJson = jsonEncode(deckDao.getJson());
+    var deckJson = deckDao.getJson();
     _FSI.saveFile(path, deckJson);
   });
 

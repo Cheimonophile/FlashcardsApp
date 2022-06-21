@@ -1,4 +1,3 @@
-
 library flashcards_app.backend.deck_dashboard;
 
 import 'dart:io';
@@ -11,12 +10,7 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flashcards_app/src/data/deck.dart';
 
-import 'package:path/path.dart' as p;
-
-
-
-
-
+import 'package:path/path.dart' as path;
 
 class DeckDashboard extends StatefulWidget {
   const DeckDashboard(this.path, this.deckDao, {super.key});
@@ -29,14 +23,17 @@ class DeckDashboard extends StatefulWidget {
 }
 
 class _DeckDashboardState extends State<DeckDashboard> {
-
   int disabled = 0;
   bool edited = false;
-  late String fileName = p.basename(File(widget.path).path);
+  Widget dashboard = const Center(child: CircularProgressIndicator());
+  late String fileName = path.basename(File(widget.path).path);
 
   /// function that locks the ui while performing operations
   Future<T> _action<T>(Future<T> Function() f) async {
-    setState(() => disabled++);
+    setState(() {
+      disabled++;
+      edited = true;
+    });
     return f().catchError((e) {
       Dialogs.alert(context, e.toString());
     }).whenComplete(() {
@@ -46,39 +43,103 @@ class _DeckDashboardState extends State<DeckDashboard> {
 
   /// save the file
   Future _saveDeck() => _action(() async {
-    await AppDao.saveDeck(widget.path, widget.deckDao);
-  });
+        await AppDao.saveDeck(widget.path, widget.deckDao);
+        setState(() {
+          edited = false;
+        });
+      });
+
+  /// create a new card
+  Future _newCard() => _action(() async {});
 
   /// function that determines whether or not the scope can be popped
   Future<bool> _onWillPop() => _action(() async {
-    if(!edited) return true;
-    var doSave = await Dialogs.yesNoCancel(context, "Do you want to save $fileName?");
-    if(doSave == null) {
-      return false;
-    }
-    else if(doSave == false) {
-      return true;
-    } 
-    else {
-      await _saveDeck();
-      return true;
-    }
-  });
+        if (!edited) return true;
+        var doSave = await Dialogs.yesNoCancel(
+            context, "Do you want to save $fileName?");
+        if (doSave == null) {
+          return false;
+        } else if (doSave == false) {
+          return true;
+        } else {
+          await _saveDeck();
+          return true;
+        }
+      });
 
-  
-  
+  /// maps of buttons for various dashboards
+  late Map<String, Function()> deckButtons = {
+    // card buttons
+    "Save Deck": _saveDeck,
+  };
+  late Map<String, Function()> cardButtons = {
+    // card buttons
+    "New Card": _newCard,
+  };
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: _onWillPop,
-      child: IgnorePointer(
-        ignoring: disabled > 0,
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text(fileName + (edited? "*": ""))
+        onWillPop: _onWillPop,
+        child: IgnorePointer(
+          ignoring: disabled > 0,
+          child: Scaffold(
+            appBar: AppBar(title: Text(fileName + (edited ? "*" : ""))),
+            body: Row(
+              children: [
+                // side bar
+                IntrinsicWidth(
+                  child: Column(
+                    children: [
+                      // deck buttons
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: deckButtons.entries
+                            .map((entry) => Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: OutlinedButton(
+                                    onPressed: entry.value,
+                                    child: Text(entry.key),
+                                  ),
+                                ))
+                            .toList(),
+                      ),
+                      const Divider(),
+                      // card buttons
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: cardButtons.entries
+                            .map((entry) => Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: OutlinedButton(
+                                    onPressed: entry.value,
+                                    child: Text(entry.key),
+                                  ),
+                                ))
+                            .toList(),
+                      ),
+                      const Divider(),
+                      // tag buttons
+                      Container(
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: OutlinedButton(
+                            onPressed: () {},
+                            child: Text("T"),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const VerticalDivider(),
+                // main area
+                const Expanded(
+                  child: Center(child: CircularProgressIndicator()),
+                ),
+              ],
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }

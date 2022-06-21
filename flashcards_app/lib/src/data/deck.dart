@@ -14,14 +14,14 @@ part 'deck.g.dart';
 class Deck {
 
   // fields
-  final Map<String, Card> cards;
-  final Map<String, Tag> tags;
+  final List<Card> cards;
+  final List<String> tags;
 
 
   /// default constructor
   Deck({
-    this.cards = const {},
-    this.tags = const {}
+    this.cards = const [],
+    this.tags = const []
   });
 
   // JSON functions

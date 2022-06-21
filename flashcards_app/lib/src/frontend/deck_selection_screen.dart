@@ -42,7 +42,7 @@ class _DeckSelectionScreenState extends State<DeckSelectionScreen> {
   _onFilesDragged(DropDoneDetails details) => _action(() async {
     var deckDaos = await AppDao.deckDrop(details);
     if(deckDaos == null) {
-      throw Exception("Something went wrong opening the deckfiles");
+      throw Exception("Something went wrong opening the deckfile");
     }
     if(deckDaos.isEmpty) {
       throw Exception("Not enough files dropped");
