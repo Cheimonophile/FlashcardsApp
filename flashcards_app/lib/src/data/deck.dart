@@ -17,12 +17,23 @@ class Deck {
   final List<Card> cards;
   final List<String> tags;
 
+  // accessors
+  Deck get clone => Deck(
+    cards: List.from(cards),
+    tags: List.from(tags),
+  );
 
-  /// default constructor
+  /// constructor
   Deck({
-    this.cards = const [],
-    this.tags = const []
+    required this.cards,
+    required this.tags,
   });
+
+  /// empty constructor
+  factory Deck.empty() => Deck(
+    cards: [],
+    tags: []
+  );
 
   // JSON functions
   factory Deck.fromJson(Map<String, dynamic> json) => _$DeckFromJson(json);

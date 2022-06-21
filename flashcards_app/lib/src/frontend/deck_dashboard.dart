@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flashcards_app/src/backend/app_data_access.dart';
 import 'package:flashcards_app/src/backend/deck_data_access.dart';
 import 'package:flashcards_app/src/frontend/dialogs.dart';
+import 'package:flashcards_app/src/frontend/visual_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -92,59 +93,62 @@ class _DeckDashboardState extends State<DeckDashboard> {
           ignoring: disabled > 0,
           child: Scaffold(
             appBar: AppBar(title: Text(fileName + (edited ? "*" : ""))),
-            body: Row(
-              children: [
-                // side bar
-                IntrinsicWidth(
-                  child: Column(
-                    children: [
-                      // deck buttons
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: deckButtons.entries
-                            .map((entry) => Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: OutlinedButton(
-                                    onPressed: entry.value,
-                                    child: Text(entry.key),
-                                  ),
-                                ))
-                            .toList(),
-                      ),
-                      const Divider(),
-                      // card buttons
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: cardButtons.entries
-                            .map((entry) => Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: OutlinedButton(
-                                    onPressed: entry.value,
-                                    child: Text(entry.key),
-                                  ),
-                                ))
-                            .toList(),
-                      ),
-                      const Divider(),
-                      // tag buttons
-                      Container(
-                        child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: OutlinedButton(
-                            onPressed: () {},
-                            child: Text("T"),
+            body: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  // side bar
+                  IntrinsicWidth(
+                    child: Column(
+                      children: [
+                        // deck buttons
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: deckButtons.entries
+                              .map((entry) => Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: OutlinedButton(
+                                      onPressed: entry.value,
+                                      child: Text(entry.key),
+                                    ),
+                                  ))
+                              .toList(),
+                        ),
+                        const Divider(),
+                        // card buttons
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: cardButtons.entries
+                              .map((entry) => Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: OutlinedButton(
+                                      onPressed: entry.value,
+                                      child: Text(entry.key),
+                                    ),
+                                  ))
+                              .toList(),
+                        ),
+                        const Divider(),
+                        // tag buttons
+                        Container(
+                          child: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: OutlinedButton(
+                              onPressed: () {},
+                              child: Text("T"),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                const VerticalDivider(),
-                // main area
-                Expanded(
-                  child: cardsTable,
-                ),
-              ],
+                  const VerticalDivider(),
+                  // main area
+                  Expanded(
+                    child: cardsTable,
+                  ),
+                ],
+              ),
             ),
           ),
         ));
