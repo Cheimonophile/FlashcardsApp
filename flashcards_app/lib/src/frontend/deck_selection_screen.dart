@@ -1,4 +1,4 @@
-library flashcards_app.backend.deck_selection_screen;
+library flashcards_app.frontend.deck_selection_screen;
 
 import 'dart:convert';
 

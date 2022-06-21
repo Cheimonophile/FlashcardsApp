@@ -1,4 +1,4 @@
-library flashcards_app.backend.dialogs;
+library flashcards_app.frontend.dialogs;
 
 
 import 'package:flutter/material.dart';

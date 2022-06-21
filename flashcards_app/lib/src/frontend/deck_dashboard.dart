@@ -1,4 +1,4 @@
-library flashcards_app.backend.deck_dashboard;
+library flashcards_app.frontend.deck_dashboard;
 
 import 'dart:io';
 
@@ -12,6 +12,8 @@ import 'package:flashcards_app/src/data/deck.dart';
 
 import 'package:path/path.dart' as path;
 
+part 'deck_dashboard/cards_table.dart';
+
 class DeckDashboard extends StatefulWidget {
   const DeckDashboard(this.path, this.deckDao, {super.key});
 
@@ -23,10 +25,15 @@ class DeckDashboard extends StatefulWidget {
 }
 
 class _DeckDashboardState extends State<DeckDashboard> {
+
+  // data fields
   int disabled = 0;
   bool edited = false;
   Widget dashboard = const Center(child: CircularProgressIndicator());
   late String fileName = path.basename(File(widget.path).path);
+
+  // widget fields
+  late Widget cardsTable =  _CardsTable(widget.deckDao);
 
   /// function that locks the ui while performing operations
   Future<T> _action<T>(Future<T> Function() f) async {
@@ -134,8 +141,8 @@ class _DeckDashboardState extends State<DeckDashboard> {
                 ),
                 const VerticalDivider(),
                 // main area
-                const Expanded(
-                  child: Center(child: CircularProgressIndicator()),
+                Expanded(
+                  child: cardsTable,
                 ),
               ],
             ),

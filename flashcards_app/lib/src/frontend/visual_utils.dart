@@ -1,5 +1,5 @@
 
-
+library flashcards_app.frontend.visual_utils;
 
 
 import 'package:flutter/material.dart';
