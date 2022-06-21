@@ -5,7 +5,19 @@ import 'package:flashcards_app/src/data/deck.dart';
 
 class DeckDao {
   final Deck _deck;
+  final List<Function()> _callbacks = [];
   DeckDao(this._deck);
+
+  // adds a callback to be made when the deck is changed
+  addCallback(Function() callback) => _callbacks.add(callback);
+
+  // calls calbacks whenever the deck is edited
+  _edit(Function() f) {
+    f();
+    for(final callback in _callbacks) {
+      callback();
+    }
+  }
 
   // getters
   List<MetaCard> cards() => _deck.cards
@@ -13,8 +25,6 @@ class DeckDao {
       .entries
       .map((entry) => MetaCard(entry.key, entry.value))
       .toList();
-
-  // Deck get deck => _deck.clone;
 
   /// accessors
   Iterable<T> mapCards<T>(T Function(int index, Card card) f) =>

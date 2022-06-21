@@ -36,6 +36,11 @@ class _DeckDashboardState extends State<DeckDashboard> {
   // widget fields
   late Widget cardsTable =  _CardsTable(widget.deckDao);
 
+  /// constructor does setup
+  _DeckDashboardState() {
+    widget.deckDao.addCallback(() => setState((){}));
+  }
+
   /// function that locks the ui while performing operations
   Future<T> _action<T>(Future<T> Function() f) async {
     setState(() {
@@ -102,6 +107,7 @@ class _DeckDashboardState extends State<DeckDashboard> {
                     child: Column(
                       children: [
                         // deck buttons
+                        const Text("Deck"),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: deckButtons.entries
@@ -116,6 +122,7 @@ class _DeckDashboardState extends State<DeckDashboard> {
                         ),
                         const Divider(),
                         // card buttons
+                        const Text("Cards"),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: cardButtons.entries
@@ -130,6 +137,7 @@ class _DeckDashboardState extends State<DeckDashboard> {
                         ),
                         const Divider(),
                         // tag buttons
+                        const Text("Tags"),
                         Container(
                           child: Padding(
                             padding: EdgeInsets.all(8.0),

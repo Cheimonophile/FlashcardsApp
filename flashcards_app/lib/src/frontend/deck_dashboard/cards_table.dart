@@ -13,6 +13,11 @@ class _CardsTableState extends State<_CardsTable> {
   // controllers
   final TextEditingController searchController = TextEditingController();
 
+  // constructor does setup
+  _CardsTableState() {
+    widget.deckDao.addCallback(() => setState((){}));
+  }
+
   @override
   void dispose() {
     searchController.dispose();
@@ -23,10 +28,10 @@ class _CardsTableState extends State<_CardsTable> {
   Widget build(BuildContext context) => Container(
         child: Column(
           children: [
-            // search bar
+            // search parameters
             Row(
               children: [
-                // search bar text
+                // search bar
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -38,8 +43,8 @@ class _CardsTableState extends State<_CardsTable> {
                 ),
               ],
             ),
+            // cards table
             const Divider(),
-            // table
             Expanded(
               child: ListView(
                 children: widget.deckDao
