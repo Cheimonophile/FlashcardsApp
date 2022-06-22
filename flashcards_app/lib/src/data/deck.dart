@@ -3,7 +3,6 @@ library flashcards_app.data.deck;
 import 'package:json_annotation/json_annotation.dart';
 
 import 'card.dart';
-import 'tag.dart';
 
 part 'deck.g.dart';
 
