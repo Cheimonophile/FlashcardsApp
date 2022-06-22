@@ -48,51 +48,63 @@ class _NewCardScreenState extends State<NewCardScreen> {
   }
 
   /// generates the card
-  Card generateCard() => Card(
+  Card get card => Card(
         frontText: frontTextController.text,
         backText: backTextController.text,
       );
+
+  /// saves the card
+  save() {
+    widget.deckDao.addCard(card);
+    frontTextController.clear();
+    backTextController.clear();
+  }
 
   @override
   Widget build(BuildContext context) => IgnorePointer(
         ignoring: disabled > 0,
         child: Scaffold(
-            appBar: AppBar(title: const Text("New Card")),
-            body: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  // place where card is written
-                  Expanded(
-                    child: Column(
-                      children: [
-                        const Text("Front"),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child:
-                                Util.multilineTextField(frontTextController),
-                          ),
+          appBar: AppBar(title: const Text("New Card")),
+          body: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                // place where card is written
+                Expanded(
+                  child: Column(
+                    children: [
+                      const Text("Front"),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Util.multilineTextField(frontTextController),
                         ),
-                        const Divider(),
-                        const Text("Back"),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child:
-                                Util.multilineTextField(backTextController),
-                          ),
+                      ),
+                      const Divider(),
+                      const Text("Back"),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Util.multilineTextField(backTextController),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  const VerticalDivider(),
-                  // place where card is displayed
-                  Expanded(
-                    child: CardFront2BackUnflipped(generateCard()),
-                  ),
-                ],
-              ),
-            )),
+                ),
+                const VerticalDivider(),
+                // place where card is displayed
+                Expanded(
+                  child: CardFront2BackUnflipped(card),
+                ),
+              ],
+            ),
+          ),
+          persistentFooterButtons: [
+            OutlinedButton(
+              onPressed: save,
+              child: const Text("Save"),
+            )
+          ],
+        ),
       );
 }

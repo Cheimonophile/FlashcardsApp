@@ -27,21 +27,14 @@ class DeckDashboard extends StatefulWidget {
 }
 
 class _DeckDashboardState extends State<DeckDashboard> {
-
   // data fields
   int disabled = 0;
-  bool edited = false;
-  Widget dashboard = const Center(child: CircularProgressIndicator());
   late String fileName = path.basename(File(widget.path).path);
-
-  // widget fields
-  late Widget cardsTable =  _CardsTable(widget.deckDao);
 
   /// function that locks the ui while performing operations
   Future<T> _action<T>(Future<T> Function() f) async {
     setState(() {
       disabled++;
-      edited = true;
     });
     return f().catchError((e) {
       Dialogs.alert(context, e.toString());
@@ -52,22 +45,22 @@ class _DeckDashboardState extends State<DeckDashboard> {
 
   /// save the file
   Future _saveDeck() => _action(() async {
-        await AppDao.saveDeck(widget.path, widget.deckDao);
-        setState(() {
-          edited = false;
-        });
+        widget.deckDao.save();
       });
 
   /// create a new card
   Future _newCard() => _action(() async {
-    Navigator.push(context, MaterialPageRoute(
-      builder: (_) => NewCardScreen(widget.deckDao)
-    ));
-  });
+        return Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => NewCardScreen(widget.deckDao),
+          ),
+        );
+      });
 
   /// function that determines whether or not the scope can be popped
   Future<bool> _onWillPop() => _action(() async {
-        if (!edited) return true;
+        if (!widget.deckDao.edited) return true;
         var doSave = await Dialogs.yesNoCancel(
             context, "Do you want to save $fileName?");
         if (doSave == null) {
@@ -91,74 +84,63 @@ class _DeckDashboardState extends State<DeckDashboard> {
   };
 
   @override
-  Widget build(BuildContext context) {
-    return WillPopScope(
-        onWillPop: _onWillPop,
-        child: IgnorePointer(
-          ignoring: disabled > 0,
-          child: Scaffold(
-            appBar: AppBar(title: Text(fileName + (edited ? "*" : ""))),
-            body: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  // side bar
-                  IntrinsicWidth(
-                    child: Column(
-                      children: [
-                        // deck buttons
-                        const Text("Deck"),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: deckButtons.entries
-                              .map((entry) => Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: OutlinedButton(
-                                      onPressed: entry.value,
-                                      child: Text(entry.key),
-                                    ),
-                                  ))
-                              .toList(),
-                        ),
-                        const Divider(),
-                        // card buttons
-                        const Text("Cards"),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: cardButtons.entries
-                              .map((entry) => Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: OutlinedButton(
-                                      onPressed: entry.value,
-                                      child: Text(entry.key),
-                                    ),
-                                  ))
-                              .toList(),
-                        ),
-                        const Divider(),
-                        // tag buttons
-                        const Text("Tags"),
-                        Container(
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: OutlinedButton(
-                              onPressed: () {},
-                              child: Text("T"),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+  Widget build(BuildContext context) => WillPopScope(
+      onWillPop: _onWillPop,
+      child: IgnorePointer(
+        ignoring: disabled > 0,
+        child: Scaffold(
+          appBar: AppBar(title: Text(fileName + (widget.deckDao.edited ? "*" : ""))),
+          body: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                // side bar
+                IntrinsicWidth(
+                  child: Column(
+                    children: [
+                      // deck buttons
+                      const Text("Deck"),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: deckButtons.entries
+                            .map((entry) => Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: OutlinedButton(
+                                    onPressed: entry.value,
+                                    child: Text(entry.key),
+                                  ),
+                                ))
+                            .toList(),
+                      ),
+                      const Divider(),
+                      // card buttons
+                      const Text("Cards"),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: cardButtons.entries
+                            .map((entry) => Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: OutlinedButton(
+                                    onPressed: entry.value,
+                                    child: Text(entry.key),
+                                  ),
+                                ))
+                            .toList(),
+                      ),
+                      const Divider(),
+                      // tag buttons
+                      const Text("Tags"),
+                    ],
                   ),
-                  const VerticalDivider(),
-                  // main area
-                  Expanded(
-                    child: cardsTable,
-                  ),
-                ],
-              ),
+                ),
+                const VerticalDivider(),
+                // main area
+                Expanded(
+                  child: _CardsTable(widget.deckDao),
+                ),
+              ],
             ),
           ),
-        ));
-  }
+        ),
+      ));
 }

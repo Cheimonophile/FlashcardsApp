@@ -59,8 +59,8 @@ abstract class AppDao {
   });
 
   /// saves a deck file
-  static Future saveDeck(String path, DeckDao deckDao) => _edit(() async {
-    var deckJson = deckDao.getJson();
+  static Future saveDeck(String path, Deck deck) => _edit(() async {
+    var deckJson = jsonEncode(deck.toJson());
     _FSI.saveFile(path, deckJson);
   });
 
@@ -69,7 +69,7 @@ abstract class AppDao {
     var deckDaoFutures = details.files.map((file) async {
       var fileString = await file.readAsString();
       var deck = Deck.fromJson(jsonDecode(fileString));
-      var deckDao = DeckDao(deck);
+      var deckDao = DeckDao(file.path, deck);
       return deckDao;
     }).toList();
     return Future.wait(deckDaoFutures);

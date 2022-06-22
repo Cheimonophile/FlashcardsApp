@@ -17,7 +17,7 @@ abstract class Util {
   );
 
   static Widget multilineTextField(TextEditingController? controller) =>
-      TextField(
+      TextFormField(
         controller: controller,
         keyboardType: TextInputType.multiline,
         maxLines: null,

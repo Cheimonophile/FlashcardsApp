@@ -21,35 +21,35 @@ class _CardsTableState extends State<_CardsTable> {
 
   @override
   Widget build(BuildContext context) => Column(
-    children: [
-      // search parameters
-      Row(
         children: [
-          // search bar
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                controller: searchController,
-                decoration: Util.searchDecoration,
+          // search parameters
+          Row(
+            children: [
+              // search bar
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    controller: searchController,
+                    decoration: Util.searchDecoration,
+                  ),
+                ),
               ),
+            ],
+          ),
+          // cards table
+          const Divider(),
+          Expanded(
+            child: ListView(
+              children: widget.deckDao
+                  .cards()
+                  .map((metaCard) => TextButton(
+                        onPressed: () {},
+                        child: Text(metaCard.card.frontText),
+                      ))
+                  .toList(),
             ),
           ),
         ],
-      ),
-      // cards table
-      const Divider(),
-      Expanded(
-        child: ListView(
-          children: widget.deckDao
-              .cards()
-              .map((metaCard) => TextButton(
-                    onPressed: () {},
-                    child: Text(metaCard.card.frontText),
-                  ))
-              .toList(),
-        ),
-      ),
-    ],
-  );
+      );
 }
