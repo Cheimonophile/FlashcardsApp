@@ -2,7 +2,7 @@ library flashcards_app.frontend.visual_utils;
 
 import 'package:flutter/material.dart';
 
-abstract class VisUtil {
+abstract class Util {
   static Widget wheel = const Padding(
     padding: EdgeInsets.all(8.0),
     child: Center(child: CircularProgressIndicator()),
@@ -16,18 +16,18 @@ abstract class VisUtil {
     isDense: true,
   );
 
-  static InputDecoration multilineDecoration = const InputDecoration(
-    filled: true,
-    border: OutlineInputBorder(),
-    isDense: true,
-  );
-
-  static Widget multilineTextField(TextEditingController? controller) => TextField(
+  static Widget multilineTextField(TextEditingController? controller) =>
+      TextField(
         controller: controller,
         keyboardType: TextInputType.multiline,
         maxLines: null,
         expands: true,
+        textAlign: TextAlign.center,
         textAlignVertical: TextAlignVertical.top,
-        decoration: VisUtil.multilineDecoration,
+        decoration: const InputDecoration(
+          filled: true,
+          border: OutlineInputBorder(),
+          isDense: true,
+        ),
       );
 }

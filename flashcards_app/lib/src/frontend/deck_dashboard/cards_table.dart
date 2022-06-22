@@ -31,7 +31,7 @@ class _CardsTableState extends State<_CardsTable> {
               padding: const EdgeInsets.all(8.0),
               child: TextField(
                 controller: searchController,
-                decoration: VisUtil.searchDecoration,
+                decoration: Util.searchDecoration,
               ),
             ),
           ),
