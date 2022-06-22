@@ -14,10 +14,13 @@ class _CardsTableState extends State<_CardsTable> {
   // controllers
   final TextEditingController searchController = TextEditingController();
 
-  // constructor constructs
+  // getters
+  String get searchText => searchController.text.trim().toLowerCase();
+
   @override
   void initState() {
     widget.controller._observer = () => setState(() {});
+    searchController.addListener(() => setState(() {}));
     super.initState();
   }
 
@@ -26,6 +29,13 @@ class _CardsTableState extends State<_CardsTable> {
     searchController.dispose();
     super.dispose();
   }
+
+  /// filters the cards according to search parameters
+  Iterable<MetaCard> filteredMetaCards() => widget.deckDao.cards()
+      // filter with search bar
+      .where((metaCard) =>
+          metaCard.card.frontText.toLowerCase().contains(searchText) ||
+          metaCard.card.backText.toLowerCase().contains(searchText));
 
   @override
   Widget build(BuildContext context) => Column(
@@ -49,8 +59,7 @@ class _CardsTableState extends State<_CardsTable> {
           const Divider(),
           Expanded(
             child: ListView(
-              children: widget.deckDao
-                  .cards()
+              children: filteredMetaCards()
                   .map((metaCard) => _CardRow(
                         metaCard,
                         widget.controller,
