@@ -46,7 +46,7 @@ class _CardRow extends StatelessWidget {
                     const VerticalDivider(),
                     Expanded(
                       child: Text(
-                        metaCard.card.backText,
+                        formatCardText(metaCard.card.backText),
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.left,
                       ),

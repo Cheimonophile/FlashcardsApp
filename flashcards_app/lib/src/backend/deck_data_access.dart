@@ -35,8 +35,16 @@ class DeckDao {
 
   /// adds a card to the deck
   addCard(Card card) => _edit(() {
-    _deck.cards.insert(0, card);
-  });
+        _deck.cards.insert(0, card);
+      });
+
+  /// deletes a set of cards from the deck
+  removeCards(Set<int> cardIndices) => _edit(() {
+        var reversedCardIndices = (cardIndices.toList()..sort()).reversed;
+        for (final cardIndex in reversedCardIndices) {
+          _deck.cards.removeAt(cardIndex);
+        }
+      });
 
   /// Json Serialization
   String getJson() => jsonEncode(_deck.toJson());

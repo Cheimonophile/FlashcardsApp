@@ -75,11 +75,12 @@ class CardsTableController {
   }
 
   /// getters
-  Set get selected => Set.unmodifiable(_selected);
+  Set<int> get selected => Set.unmodifiable(_selected);
 
   /// selected modifiers
   addSelected(Iterable<int> newSelected) =>
       _edit(() => _selected.addAll(newSelected));
   removeSelected(Iterable<int> oldSelected) =>
       _edit(() => _selected.removeAll(oldSelected));
+  clearSelected() => _edit(() => _selected.clear());
 }

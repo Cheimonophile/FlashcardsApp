@@ -62,6 +62,19 @@ class _DeckDashboardState extends State<DeckDashboard> {
         );
       });
 
+  /// deletes cards
+  Future _deleteCards() => _action(() async {
+        var hasPermission = await Dialogs.permission(
+          context,
+          "Are you sure you want to delete these cards?",
+        );
+        if(hasPermission != true) {
+          return;
+        }
+        widget.deckDao.removeCards(cardsTableController.selected);
+        cardsTableController.clearSelected();
+      });
+
   /// function that determines whether or not the scope can be popped
   Future<bool> _onWillPop() => _action(() async {
         if (!widget.deckDao.edited) return true;
@@ -85,7 +98,7 @@ class _DeckDashboardState extends State<DeckDashboard> {
   late Map<String, Function()> cardButtons = {
     // card buttons
     "New Card": _newCard,
-    "Delete Cards": () {},
+    "Delete Cards": _deleteCards,
   };
 
   @override
@@ -94,7 +107,8 @@ class _DeckDashboardState extends State<DeckDashboard> {
       child: IgnorePointer(
         ignoring: disabled > 0,
         child: Scaffold(
-          appBar: AppBar(title: Text(fileName + (widget.deckDao.edited ? "*" : ""))),
+          appBar: AppBar(
+              title: Text(fileName + (widget.deckDao.edited ? "*" : ""))),
           body: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
