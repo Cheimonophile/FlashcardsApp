@@ -15,12 +15,12 @@ class Deck {
 
   // fields
   final List<Card> cards;
-  final List<String> tags;
+  final Set<String> tags;
 
   // accessors
   Deck get clone => Deck(
     cards: List.from(cards),
-    tags: List.from(tags),
+    tags: Set.from(tags),
   );
 
   /// constructor
@@ -32,7 +32,7 @@ class Deck {
   /// empty constructor
   factory Deck.empty() => Deck(
     cards: [],
-    tags: []
+    tags: {}
   );
 
   // JSON functions
