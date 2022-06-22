@@ -5,19 +5,7 @@ import 'package:flashcards_app/src/data/deck.dart';
 
 class DeckDao {
   final Deck _deck;
-  final List<Function()> _callbacks = [];
   DeckDao(this._deck);
-
-  // adds a callback to be made when the deck is changed
-  addCallback(Function() callback) => _callbacks.add(callback);
-
-  // calls calbacks whenever the deck is edited
-  _edit(Function() f) {
-    f();
-    for(final callback in _callbacks) {
-      callback();
-    }
-  }
 
   // getters
   List<MetaCard> cards() => _deck.cards

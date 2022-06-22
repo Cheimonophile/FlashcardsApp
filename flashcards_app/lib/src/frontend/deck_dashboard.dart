@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flashcards_app/src/backend/app_data_access.dart';
 import 'package:flashcards_app/src/backend/deck_data_access.dart';
 import 'package:flashcards_app/src/frontend/dialogs.dart';
+import 'package:flashcards_app/src/frontend/new_card_screen.dart';
 import 'package:flashcards_app/src/frontend/visual_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -36,11 +37,6 @@ class _DeckDashboardState extends State<DeckDashboard> {
   // widget fields
   late Widget cardsTable =  _CardsTable(widget.deckDao);
 
-  /// constructor does setup
-  _DeckDashboardState() {
-    widget.deckDao.addCallback(() => setState((){}));
-  }
-
   /// function that locks the ui while performing operations
   Future<T> _action<T>(Future<T> Function() f) async {
     setState(() {
@@ -63,7 +59,11 @@ class _DeckDashboardState extends State<DeckDashboard> {
       });
 
   /// create a new card
-  Future _newCard() => _action(() async {});
+  Future _newCard() => _action(() async {
+    Navigator.push(context, MaterialPageRoute(
+      builder: (_) => NewCardScreen(widget.deckDao)
+    ));
+  });
 
   /// function that determines whether or not the scope can be popped
   Future<bool> _onWillPop() => _action(() async {
