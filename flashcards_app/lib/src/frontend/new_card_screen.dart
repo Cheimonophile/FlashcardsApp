@@ -49,8 +49,8 @@ class _NewCardScreenState extends State<NewCardScreen> {
 
   /// generates the card
   Card get card => Card(
-        frontText: frontTextController.text,
-        backText: backTextController.text,
+        frontText: frontTextController.text.trim(),
+        backText: backTextController.text.trim(),
       );
 
   /// saves the card

@@ -15,6 +15,7 @@ import 'package:flashcards_app/src/data/deck.dart';
 import 'package:path/path.dart' as path;
 
 part 'deck_dashboard/cards_table.dart';
+part 'deck_dashboard/card_row.dart';
 
 class DeckDashboard extends StatefulWidget {
   const DeckDashboard(this.path, this.deckDao, {super.key});
@@ -30,6 +31,9 @@ class _DeckDashboardState extends State<DeckDashboard> {
   // data fields
   int disabled = 0;
   late String fileName = path.basename(File(widget.path).path);
+
+  // controllers
+  CardsTableController cardsTableController = CardsTableController();
 
   /// function that locks the ui while performing operations
   Future<T> _action<T>(Future<T> Function() f) async {
@@ -81,6 +85,7 @@ class _DeckDashboardState extends State<DeckDashboard> {
   late Map<String, Function()> cardButtons = {
     // card buttons
     "New Card": _newCard,
+    "Delete Cards": () {},
   };
 
   @override
@@ -104,7 +109,7 @@ class _DeckDashboardState extends State<DeckDashboard> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: deckButtons.entries
                             .map((entry) => Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                  padding: const EdgeInsets.only(top: 8.0),
                                   child: OutlinedButton(
                                     onPressed: entry.value,
                                     child: Text(entry.key),
@@ -119,7 +124,7 @@ class _DeckDashboardState extends State<DeckDashboard> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: cardButtons.entries
                             .map((entry) => Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                  padding: const EdgeInsets.only(top: 8.0),
                                   child: OutlinedButton(
                                     onPressed: entry.value,
                                     child: Text(entry.key),
@@ -136,7 +141,7 @@ class _DeckDashboardState extends State<DeckDashboard> {
                 const VerticalDivider(),
                 // main area
                 Expanded(
-                  child: _CardsTable(widget.deckDao),
+                  child: _CardsTable(widget.deckDao, cardsTableController),
                 ),
               ],
             ),

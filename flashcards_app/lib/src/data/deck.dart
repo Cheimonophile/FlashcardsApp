@@ -17,10 +17,10 @@ class Deck {
   final Set<String> tags;
 
   // accessors
-  Deck get clone => Deck(
-    cards: List.from(cards),
-    tags: Set.from(tags),
-  );
+  // Deck get clone => Deck(
+  //   cards: List.from(cards),
+  //   tags: Set.from(tags),
+  // );
 
   /// constructor
   Deck({
