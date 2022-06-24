@@ -1,7 +1,7 @@
 part of flashcards_app.frontend.deck_dashboard;
 
-class _CardsTable extends StatefulWidget {
-  const _CardsTable(this.deckDao, this.controller, this.whileChange,
+class _CardsDashboard extends StatefulWidget {
+  const _CardsDashboard(this.deckDao, this.controller, this.whileChange,
       {super.key});
 
   final DeckDao deckDao;
@@ -9,10 +9,10 @@ class _CardsTable extends StatefulWidget {
   final Future Function(Future Function()) whileChange;
 
   @override
-  State<_CardsTable> createState() => _CardsTableState();
+  State<_CardsDashboard> createState() => _CardsDashboardState();
 }
 
-class _CardsTableState extends State<_CardsTable> {
+class _CardsDashboardState extends State<_CardsDashboard> {
   // controllers
   final TextEditingController searchController = TextEditingController();
 

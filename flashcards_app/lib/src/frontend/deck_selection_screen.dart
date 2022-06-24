@@ -9,7 +9,7 @@ import 'package:flashcards_app/src/data/config.dart';
 import 'package:flashcards_app/src/data/deck.dart';
 import 'package:flutter/material.dart';
 
-import 'deck_dashboard.dart';
+import 'deck_dashboard_screen.dart';
 import 'dialogs.dart';
 
 class DeckSelectionScreen extends StatefulWidget {
@@ -52,7 +52,7 @@ class _DeckSelectionScreenState extends State<DeckSelectionScreen> {
     }
     return Future(() {
       Navigator.push(context, MaterialPageRoute(
-        builder: (_) => DeckDashboard(details.files[0].path, deckDaos[0]),
+        builder: (_) => DeckDashboardScreen(details.files[0].path, deckDaos[0]),
       ));
     });
   });
