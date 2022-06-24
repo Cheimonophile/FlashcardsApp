@@ -1,4 +1,4 @@
-library flashcards_app.frontend.deck_dashboard;
+library flashcards_app.frontend.deck_dashboard_screen;
 
 import 'dart:io';
 
@@ -16,8 +16,9 @@ import 'package:path/path.dart' as path;
 
 import 'nav_bar.dart';
 
-part 'deck_dashboard/cards_dashboard.dart';
-part 'deck_dashboard/card_row.dart';
+part 'deck_dashboard_screen/cards_dashboard.dart';
+part 'deck_dashboard_screen/card_row.dart';
+part 'deck_dashboard_screen/review_dashboard.dart';
 
 class DeckDashboardScreen extends StatefulWidget {
   const DeckDashboardScreen(this.path, this.deckDao, {super.key});
@@ -78,16 +79,20 @@ class _DeckDashboardScreenState extends State<DeckDashboardScreen> {
 
   // list of pages for the
   late List<_NavBarItem> pages = [
-    _NavBarItem("Review", () => const Text("Review")),
+    _NavBarItem(
+        "Review",
+        () => _ReviewDashboard(
+              widget.deckDao,
+              whileChange: (f) => _action(f),
+            )),
     _NavBarItem("Deck", () => const Text("Deck")),
     _NavBarItem(
-      "Cards",
-      () => _CardsDashboard(
-        widget.deckDao,
-        cardsTableController,
-        (f) => _action(f),
-      ),
-    ),
+        "Cards",
+        () => _CardsDashboard(
+              widget.deckDao,
+              cardsTableController,
+              whileChange: (f) => _action(f),
+            )),
   ];
 
   @override
@@ -106,7 +111,8 @@ class _DeckDashboardScreenState extends State<DeckDashboardScreen> {
               child: NavBar(
                 currentPageIndex: pageIndex,
                 pageNames: pages.map((page) => page.name).toList(),
-                onPressed: (newPageIndex) => setState(() => pageIndex = newPageIndex),
+                onPressed: (newPageIndex) =>
+                    setState(() => pageIndex = newPageIndex),
               ),
             )),
       ));

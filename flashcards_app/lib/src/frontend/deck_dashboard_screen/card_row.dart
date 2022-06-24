@@ -1,4 +1,4 @@
-part of flashcards_app.frontend.deck_dashboard;
+part of flashcards_app.frontend.deck_dashboard_screen;
 
 class _CardRow extends StatelessWidget {
   const _CardRow(this.metaCard, this.controller, {super.key});

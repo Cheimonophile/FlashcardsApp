@@ -1,8 +1,8 @@
-part of flashcards_app.frontend.deck_dashboard;
+part of flashcards_app.frontend.deck_dashboard_screen;
 
 class _CardsDashboard extends StatefulWidget {
-  const _CardsDashboard(this.deckDao, this.controller, this.whileChange,
-      {super.key});
+  const _CardsDashboard(this.deckDao, this.controller,
+      {super.key, required this.whileChange});
 
   final DeckDao deckDao;
   final CardsTableController controller;
@@ -64,7 +64,7 @@ class _CardsDashboardState extends State<_CardsDashboard> {
       });
 
   // card buttons
-  late Map<String, Function()> cardButtons = {
+  late final Map<String, Function()> cardButtons = {
     "New Card": _newCard,
     "Delete Cards": _deleteCards,
   };
@@ -75,18 +75,16 @@ class _CardsDashboardState extends State<_CardsDashboard> {
           // side bar
           IntrinsicWidth(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: cardButtons.entries
-                      .map((entry) => Padding(
-                            padding: const EdgeInsets.only(top: 8.0),
-                            child: OutlinedButton(
-                              onPressed: entry.value,
-                              child: Text(entry.key),
-                            ),
-                          ))
-                      .toList()
-
-            ),
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: cardButtons.entries
+                    .map((entry) => Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: OutlinedButton(
+                            onPressed: entry.value,
+                            child: Text(entry.key),
+                          ),
+                        ))
+                    .toList()),
           ),
           const VerticalDivider(),
           // main area
