@@ -14,6 +14,8 @@ import 'package:flashcards_app/src/data/deck.dart';
 
 import 'package:path/path.dart' as path;
 
+import 'nav_bar.dart';
+
 part 'deck_dashboard/cards_dashboard.dart';
 part 'deck_dashboard/card_row.dart';
 
@@ -101,33 +103,10 @@ class _DeckDashboardScreenState extends State<DeckDashboardScreen> {
               child: pages[pageIndex].pageBuilder(),
             ),
             bottomNavigationBar: BottomAppBar(
-              child: Row(
-                children: pages
-                    .asMap()
-                    .entries
-                    .map((entry) => Expanded(
-                          child: TextButton(
-                            autofocus: true,
-                            onPressed: () =>
-                                setState(() => pageIndex = entry.key),
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Text(
-                                entry.value.name,
-                                style: TextStyle(
-                                  fontSize: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge
-                                      ?.fontSize,
-                                  decoration: entry.key == pageIndex
-                                      ? TextDecoration.underline
-                                      : null,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ))
-                    .toList(),
+              child: NavBar(
+                currentPageIndex: pageIndex,
+                pageNames: pages.map((page) => page.name).toList(),
+                onPressed: (newPageIndex) => setState(() => pageIndex = newPageIndex),
               ),
             )),
       ));
