@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flashcards_app/src/algorithms/pick_cards.dart';
 import 'package:flashcards_app/src/backend/app_data_access.dart';
 import 'package:flashcards_app/src/data/card.dart';
 import 'package:flashcards_app/src/data/deck.dart';
@@ -47,6 +48,15 @@ class DeckDao {
           _deck.cards.removeAt(cardIndex);
         }
       });
+
+  /// picks a list of cards for review
+  List<MetaCard> pickCards(PickCardsAlgo algo, {int? numCards}) {
+   numCards ??= _deck.cards.length;
+   if(numCards > _deck.cards.length) {
+    throw Exception("Can't pick $numCards cards from a deck with only ${_deck.cards.length} cards");
+   }
+   return algo.pick(numCards, cards()).toList();
+  }
 
   /// Json Serialization
   String getJson() => jsonEncode(_deck.toJson());

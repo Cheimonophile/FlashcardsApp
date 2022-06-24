@@ -2,6 +2,7 @@ library flashcards_app.frontend.deck_dashboard_screen;
 
 import 'dart:io';
 
+import 'package:flashcards_app/src/algorithms/pick_cards.dart';
 import 'package:flashcards_app/src/backend/app_data_access.dart';
 import 'package:flashcards_app/src/backend/deck_data_access.dart';
 import 'package:flashcards_app/src/frontend/dialogs.dart';

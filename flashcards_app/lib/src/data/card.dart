@@ -9,19 +9,19 @@ part 'card.g.dart';
 @JsonSerializable()
 class Card {
   // meta information
-  static const double minWeight = 0;
-  static const double maxWeight = 7;
+  static const double minScore = 0;
+  static const double maxScore = 7;
 
   // data
   final String frontText;
   final String backText;
-  final double weight;
+  final double score;
 
   // constructor
   Card({
     required this.frontText,
     required this.backText,
-    this.weight = 0,
+    this.score = 0,
   });
 
   // JSON functions

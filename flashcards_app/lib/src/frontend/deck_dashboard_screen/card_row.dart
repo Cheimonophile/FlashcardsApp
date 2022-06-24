@@ -16,7 +16,7 @@ class _CardRow extends StatelessWidget {
   }
 
   /// formats the card text for display in the text box
-  String formatCardText(String cardText) => cardText.replaceAll("\n", "...\t");
+  static String formatCardText(String cardText) => cardText.replaceAll("\n", "...\t");
 
   @override
   Widget build(BuildContext context) => Row(
