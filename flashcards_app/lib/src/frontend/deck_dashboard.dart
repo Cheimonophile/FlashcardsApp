@@ -31,6 +31,7 @@ class _DeckDashboardState extends State<DeckDashboard> {
   // data fields
   int disabled = 0;
   late String fileName = path.basename(File(widget.path).path);
+  int pageIndex = 0;
 
   // controllers
   CardsTableController cardsTableController = CardsTableController();
@@ -68,7 +69,7 @@ class _DeckDashboardState extends State<DeckDashboard> {
           context,
           "Are you sure you want to delete these cards?",
         );
-        if(hasPermission != true) {
+        if (hasPermission != true) {
           return;
         }
         widget.deckDao.removeCards(cardsTableController.selected);
@@ -101,65 +102,129 @@ class _DeckDashboardState extends State<DeckDashboard> {
     "Delete Cards": _deleteCards,
   };
 
+  // list of pages for the
+  late List<_NavBarItem> pages = [
+    _NavBarItem("Review", () => const Text("Review")),
+    _NavBarItem("Deck", () => const Text("Deck")),
+    _NavBarItem(
+      "Cards",
+      () => _CardsTable(widget.deckDao, cardsTableController),
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) => WillPopScope(
       onWillPop: _onWillPop,
       child: IgnorePointer(
         ignoring: disabled > 0,
         child: Scaffold(
-          appBar: AppBar(
-              title: Text(fileName + (widget.deckDao.edited ? "*" : ""))),
-          body: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                // side bar
-                IntrinsicWidth(
-                  child: Column(
-                    children: [
-                      // deck buttons
-                      const Text("Deck"),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: deckButtons.entries
-                            .map((entry) => Padding(
-                                  padding: const EdgeInsets.only(top: 8.0),
-                                  child: OutlinedButton(
-                                    onPressed: entry.value,
-                                    child: Text(entry.key),
-                                  ),
-                                ))
-                            .toList(),
-                      ),
-                      const Divider(),
-                      // card buttons
-                      const Text("Cards"),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: cardButtons.entries
-                            .map((entry) => Padding(
-                                  padding: const EdgeInsets.only(top: 8.0),
-                                  child: OutlinedButton(
-                                    onPressed: entry.value,
-                                    child: Text(entry.key),
-                                  ),
-                                ))
-                            .toList(),
-                      ),
-                      const Divider(),
-                      // tag buttons
-                      const Text("Tags"),
-                    ],
-                  ),
+            appBar: AppBar(
+                title: Text(fileName + (widget.deckDao.edited ? "*" : ""))),
+            body: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: pages[pageIndex].pageBuilder()
+
+                // Row(
+                //   children: [
+                //     // side bar
+                //     IntrinsicWidth(
+                //       child: Column(
+                //         children: [
+                //           // deck buttons
+                //           const Text("Deck"),
+                //           Column(
+                //             crossAxisAlignment: CrossAxisAlignment.stretch,
+                //             children: deckButtons.entries
+                //                 .map((entry) => Padding(
+                //                       padding: const EdgeInsets.only(top: 8.0),
+                //                       child: OutlinedButton(
+                //                         onPressed: entry.value,
+                //                         child: Text(entry.key),
+                //                       ),
+                //                     ))
+                //                 .toList(),
+                //           ),
+                //           const Divider(),
+                //           // card buttons
+                //           const Text("Cards"),
+                //           Column(
+                //             crossAxisAlignment: CrossAxisAlignment.stretch,
+                //             children: cardButtons.entries
+                //                 .map((entry) => Padding(
+                //                       padding: const EdgeInsets.only(top: 8.0),
+                //                       child: OutlinedButton(
+                //                         onPressed: entry.value,
+                //                         child: Text(entry.key),
+                //                       ),
+                //                     ))
+                //                 .toList(),
+                //           ),
+                //           const Divider(),
+                //           // tag buttons
+                //           const Text("Tags"),
+                //         ],
+                //       ),
+                //     ),
+                //     const VerticalDivider(),
+                //     // main area
+                //     Expanded(
+                //       child: _CardsTable(widget.deckDao, cardsTableController),
+                //     ),
+                //   ],
+                // ),
                 ),
-                const VerticalDivider(),
-                // main area
-                Expanded(
-                  child: _CardsTable(widget.deckDao, cardsTableController),
-                ),
-              ],
-            ),
-          ),
-        ),
+            // persistentFooterButtons: [
+            //   Expanded(
+            //     child: TextButton(
+            //       onPressed: () {},
+            //       child: Text("Test Button"),
+            //     ),
+            //   ),
+            // ],
+            // bottomNavigationBar: BottomNavigationBar(
+            //   currentIndex: pageIndex,
+            //   items: [
+            //     BottomNavigationBarItem(icon: Container(), label: "Deck"),
+            //     BottomNavigationBarItem(icon: Container(), label: "Cards"),
+            //   ],
+            // ),
+            bottomNavigationBar: BottomAppBar(
+              child: Row(
+                children: pages
+                    .asMap()
+                    .entries
+                    .map((entry) => Expanded(
+                          child: TextButton(
+                            autofocus: true,
+                            onPressed: () => setState(() => pageIndex = entry.key),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Text(
+                                  entry.value.name,
+                                  style: TextStyle(
+                                    fontSize: Theme.of(context).textTheme.titleLarge?.fontSize,
+                                    decoration: entry.key == pageIndex
+                                        ? TextDecoration.underline
+                                        : null,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ))
+                    .toList(),
+              ),
+            )),
       ));
+}
+
+class _NavBarItem {
+  final String name;
+  final Widget Function() pageBuilder;
+
+  _NavBarItem(this.name, this.pageBuilder);
 }

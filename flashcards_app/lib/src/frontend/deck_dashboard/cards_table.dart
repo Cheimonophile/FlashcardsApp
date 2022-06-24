@@ -31,7 +31,8 @@ class _CardsTableState extends State<_CardsTable> {
   }
 
   /// filters the cards according to search parameters
-  Iterable<MetaCard> filteredMetaCards() => widget.deckDao.cards()
+  Iterable<MetaCard> filteredMetaCards() => widget.deckDao
+      .cards()
       // filter with search bar
       .where((metaCard) =>
           metaCard.card.frontText.toLowerCase().contains(searchText) ||
