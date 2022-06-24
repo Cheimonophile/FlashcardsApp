@@ -24,7 +24,9 @@ class DeckDao {
   /// edit function sets the deckDao as edited
   T _edit<T>(T Function() f) {
     _edited = true;
-    return f();
+    var result = f();
+    save();
+    return result;
   }
 
   /// saves the deck in its proper location

@@ -53,29 +53,6 @@ class _DeckDashboardState extends State<DeckDashboard> {
         widget.deckDao.save();
       });
 
-  /// create a new card
-  Future _newCard() => _action(() async {
-        return Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => NewCardScreen(widget.deckDao),
-          ),
-        );
-      });
-
-  /// deletes cards
-  Future _deleteCards() => _action(() async {
-        var hasPermission = await Dialogs.permission(
-          context,
-          "Are you sure you want to delete these cards?",
-        );
-        if (hasPermission != true) {
-          return;
-        }
-        widget.deckDao.removeCards(cardsTableController.selected);
-        cardsTableController.clearSelected();
-      });
-
   /// function that determines whether or not the scope can be popped
   Future<bool> _onWillPop() => _action(() async {
         if (!widget.deckDao.edited) return true;
@@ -96,11 +73,6 @@ class _DeckDashboardState extends State<DeckDashboard> {
     // card buttons
     "Save Deck": _saveDeck,
   };
-  late Map<String, Function()> cardButtons = {
-    // card buttons
-    "New Card": _newCard,
-    "Delete Cards": _deleteCards,
-  };
 
   // list of pages for the
   late List<_NavBarItem> pages = [
@@ -108,7 +80,7 @@ class _DeckDashboardState extends State<DeckDashboard> {
     _NavBarItem("Deck", () => const Text("Deck")),
     _NavBarItem(
       "Cards",
-      () => _CardsTable(widget.deckDao, cardsTableController),
+      () => _CardsTable(widget.deckDao, cardsTableController, (f) => _action(f)),
     ),
   ];
 
@@ -198,9 +170,6 @@ class _DeckDashboardState extends State<DeckDashboard> {
                             autofocus: true,
                             onPressed: () => setState(() => pageIndex = entry.key),
                             child: Container(
-                              decoration: BoxDecoration(
-                                
-                              ),
                               child: Padding(
                                 padding: const EdgeInsets.all(16.0),
                                 child: Text(
