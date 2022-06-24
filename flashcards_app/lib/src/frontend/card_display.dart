@@ -5,60 +5,83 @@ import 'package:flutter/src/widgets/framework.dart';
 
 import 'package:flashcards_app/src/data/card.dart';
 
-class CardFront2BackUnflipped extends StatelessWidget {
-  const CardFront2BackUnflipped(this.card, {super.key});
+class CardDisplay extends StatelessWidget {
+  const CardDisplay(
+    this.card, {
+    super.key,
+    required this.flipDirection,
+    required this.flipPosition,
+  });
 
   final Card card;
+  final FlipDirection flipDirection;
+  final FlipPosition flipPosition;
 
   @override
-  Widget build(BuildContext context) => Column(
-    children: [
-      Expanded(child: _CardText(card.frontText)),
-      const Divider(),
-      Expanded(child: _CardText(card.backText))
-    ]
-  );
+  Widget build(BuildContext context) {
+    switch (flipDirection) {
+      case FlipDirection.front2back:
+        switch (flipPosition) {
+          case FlipPosition.unflipped:
+            return _CardFront2BackUnflipped(card);
+          case FlipPosition.flipped:
+            return _CardFront2BackUnflipped(card);
+        }
+      case FlipDirection.back2front:
+        switch (flipPosition) {
+          case FlipPosition.unflipped:
+            return _CardBack2FrontUnflipped(card);
+          case FlipPosition.flipped:
+            return _CardBack2FrontFlipped(card);
+        }
+    }
+  }
 }
 
-class CardFront2BackFlipped extends StatelessWidget {
-  const CardFront2BackFlipped(this.card, {super.key});
+class _CardFront2BackUnflipped extends StatelessWidget {
+  const _CardFront2BackUnflipped(this.card, {super.key});
 
   final Card card;
 
   @override
-  Widget build(BuildContext context) => Column(
-    children: [
-      Expanded(child: _CardText(card.frontText))
-    ]
-  );
+  Widget build(BuildContext context) => Column(children: [
+        Expanded(child: _CardText(card.frontText)),
+        const Divider(),
+        Expanded(child: _CardText(card.backText))
+      ]);
 }
 
-class CardBack2FrontUnflipped extends StatelessWidget {
-  const CardBack2FrontUnflipped(this.card, {super.key});
+class _CardFront2BackFlipped extends StatelessWidget {
+  const _CardFront2BackFlipped(this.card, {super.key});
 
   final Card card;
 
   @override
-  Widget build(BuildContext context) => Column(
-    children: [
-      Expanded(child: _CardText(card.backText)),
-      const Divider(),
-      Expanded(child: _CardText(card.frontText))
-    ]
-  );
+  Widget build(BuildContext context) =>
+      Column(children: [Expanded(child: _CardText(card.frontText))]);
 }
 
-class CardBack2FrontFlipped extends StatelessWidget {
-  const CardBack2FrontFlipped(this.card, {super.key});
+class _CardBack2FrontUnflipped extends StatelessWidget {
+  const _CardBack2FrontUnflipped(this.card, {super.key});
 
   final Card card;
 
   @override
-  Widget build(BuildContext context) => Column(
-    children: [
-      Expanded(child: _CardText(card.backText))
-    ]
-  );
+  Widget build(BuildContext context) => Column(children: [
+        Expanded(child: _CardText(card.backText)),
+        const Divider(),
+        Expanded(child: _CardText(card.frontText))
+      ]);
+}
+
+class _CardBack2FrontFlipped extends StatelessWidget {
+  const _CardBack2FrontFlipped(this.card, {super.key});
+
+  final Card card;
+
+  @override
+  Widget build(BuildContext context) =>
+      Column(children: [Expanded(child: _CardText(card.backText))]);
 }
 
 class _CardText extends StatelessWidget {
@@ -67,5 +90,21 @@ class _CardText extends StatelessWidget {
   final String text;
 
   @override
-  Widget build(BuildContext context) => Center(child: Text(text, textAlign: TextAlign.center,));
+  Widget build(BuildContext context) => Center(
+          child: Text(
+        text,
+        textAlign: TextAlign.center,
+      ));
+}
+
+/// the flip direction of the card
+enum FlipDirection {
+  front2back,
+  back2front,
+}
+
+/// the flip position of the card
+enum FlipPosition {
+  unflipped,
+  flipped,
 }

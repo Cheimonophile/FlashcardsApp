@@ -8,6 +8,11 @@ abstract class Util {
     child: Center(child: CircularProgressIndicator()),
   );
 
+  static Widget todo = const Padding(
+    padding: EdgeInsets.all(8.0),
+    child: Center(child: Text("<To Do>")),
+  );
+
   static InputDecoration searchDecoration = const InputDecoration(
     prefixIcon: Icon(Icons.search),
     hintText: "Search",

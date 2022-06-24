@@ -14,10 +14,14 @@ class _ReviewDashboard extends StatefulWidget {
 class _ReviewDashboardState extends State<_ReviewDashboard> {
 
 
-  late final Map<String, Function()> buttons = {
-    
-  };
+  /// 
 
+
+
+  /// buttons for command window
+  late final Map<String, Function()> buttons = {
+    "Review": () {}
+  };
 
   @override
   Widget build(BuildContext context) => Row(
@@ -41,7 +45,7 @@ class _ReviewDashboardState extends State<_ReviewDashboard> {
           const VerticalDivider(),
           // main area
           Expanded(
-            child: Util.wheel
+            child: Util.todo
           ),
         ],
       );

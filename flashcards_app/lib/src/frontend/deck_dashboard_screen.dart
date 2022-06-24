@@ -48,6 +48,7 @@ class _DeckDashboardScreenState extends State<DeckDashboardScreen> {
       Dialogs.alert(context, e.toString());
     }).whenComplete(() {
       setState(() => disabled--);
+      cardsTableController.clearSelected();
     });
   }
 

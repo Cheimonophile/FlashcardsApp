@@ -94,7 +94,11 @@ class _NewCardScreenState extends State<NewCardScreen> {
                 const VerticalDivider(),
                 // place where card is displayed
                 Expanded(
-                  child: CardFront2BackUnflipped(card),
+                  child: CardDisplay(
+                    card,
+                    flipDirection: FlipDirection.front2back,
+                    flipPosition: FlipPosition.flipped,
+                  ),
                 ),
               ],
             ),
