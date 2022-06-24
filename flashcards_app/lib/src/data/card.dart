@@ -8,12 +8,20 @@ part 'card.g.dart';
 /// represents a single card
 @JsonSerializable()
 class Card {
+  // meta information
+  static const double minWeight = 0;
+  static const double maxWeight = 7;
+
+  // data
   final String frontText;
   final String backText;
+  final double weight;
 
+  // constructor
   Card({
     required this.frontText,
     required this.backText,
+    this.weight = 0,
   });
 
   // JSON functions

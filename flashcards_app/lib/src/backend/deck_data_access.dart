@@ -7,12 +7,12 @@ import 'package:flashcards_app/src/data/deck.dart';
 class DeckDao {
   final Deck _deck;
   final String _path;
-  bool _edited = false;
+  // bool _edited = false;
 
   DeckDao(this._path, this._deck);
 
   // getters
-  bool get edited => _edited;
+  // bool get edited => _edited;
 
   // gets the cards in the deck as key value pairs
   List<MetaCard> cards() => _deck.cards
@@ -23,7 +23,7 @@ class DeckDao {
 
   /// edit function sets the deckDao as edited
   T _edit<T>(T Function() f) {
-    _edited = true;
+    // _edited = true;
     var result = f();
     save();
     return result;
@@ -32,7 +32,7 @@ class DeckDao {
   /// saves the deck in its proper location
   save() async {
     await AppDao.saveDeck(_path, _deck);
-    _edited = false;
+    // _edited = false;
   }
 
   /// adds a card to the deck

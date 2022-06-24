@@ -57,21 +57,6 @@ class _DeckDashboardScreenState extends State<DeckDashboardScreen> {
         widget.deckDao.save();
       });
 
-  /// function that determines whether or not the scope can be popped
-  Future<bool> _onWillPop() => _action(() async {
-        if (!widget.deckDao.edited) return true;
-        var doSave = await Dialogs.yesNoCancel(
-            context, "Do you want to save $fileName?");
-        if (doSave == null) {
-          return false;
-        } else if (doSave == false) {
-          return true;
-        } else {
-          await _saveDeck();
-          return true;
-        }
-      });
-
   /// maps of buttons for various dashboards
   late Map<String, Function()> deckButtons = {
     // card buttons
@@ -97,26 +82,24 @@ class _DeckDashboardScreenState extends State<DeckDashboardScreen> {
   ];
 
   @override
-  Widget build(BuildContext context) => WillPopScope(
-      onWillPop: _onWillPop,
-      child: IgnorePointer(
-        ignoring: disabled > 0,
-        child: Scaffold(
-            appBar: AppBar(
-                title: Text(fileName + (widget.deckDao.edited ? "*" : ""))),
-            body: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: pages[pageIndex].pageBuilder(),
-            ),
-            bottomNavigationBar: BottomAppBar(
-              child: NavBar(
-                currentPageIndex: pageIndex,
-                pageNames: pages.map((page) => page.name).toList(),
-                onPressed: (newPageIndex) =>
-                    setState(() => pageIndex = newPageIndex),
-              ),
-            )),
-      ));
+  Widget build(BuildContext context) => IgnorePointer(
+    ignoring: disabled > 0,
+    child: Scaffold(
+        appBar: AppBar(
+            title: Text(fileName)),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: pages[pageIndex].pageBuilder(),
+        ),
+        bottomNavigationBar: BottomAppBar(
+          child: NavBar(
+            currentPageIndex: pageIndex,
+            pageNames: pages.map((page) => page.name).toList(),
+            onPressed: (newPageIndex) =>
+                setState(() => pageIndex = newPageIndex),
+          ),
+        )),
+  );
 }
 
 class _NavBarItem {
