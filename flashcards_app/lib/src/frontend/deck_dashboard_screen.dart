@@ -9,7 +9,7 @@ import 'package:flashcards_app/src/backend/deck_data_access.dart';
 import 'package:flashcards_app/src/frontend/dialogs.dart';
 import 'package:flashcards_app/src/frontend/new_card_screen.dart';
 import 'package:flashcards_app/src/frontend/review_screen.dart';
-import 'package:flashcards_app/src/frontend/screen_state.dart';
+import 'package:flashcards_app/src/frontend/screen.dart';
 import 'package:flashcards_app/src/frontend/visual_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';

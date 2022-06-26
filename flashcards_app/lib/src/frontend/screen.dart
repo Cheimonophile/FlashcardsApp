@@ -5,8 +5,20 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 
+
+
+abstract class Screen<ScreenReturn> extends StatefulWidget {
+  const Screen({super.key});
+
+  /// get the route for the review screen
+  MaterialPageRoute<ScreenReturn> get route => MaterialPageRoute(
+        builder: (context) => this,
+      );
+}
+
+
 /// class includes a bunch of would-be boilerplate for 
-abstract class ScreenState<SW extends StatefulWidget> extends State<SW> {
+abstract class ScreenState<StatefulWidgetType extends StatefulWidget> extends State<StatefulWidgetType> {
 
   /// function that locks the ui while performing operations
   /// 

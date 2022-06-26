@@ -8,7 +8,7 @@ import 'package:flashcards_app/src/backend/app_data_access.dart';
 import 'package:flashcards_app/src/backend/deck_data_access.dart';
 import 'package:flashcards_app/src/data/config.dart';
 import 'package:flashcards_app/src/data/deck.dart';
-import 'package:flashcards_app/src/frontend/screen_state.dart';
+import 'package:flashcards_app/src/frontend/screen.dart';
 import 'package:flutter/material.dart';
 
 import 'deck_dashboard_screen.dart';

@@ -17,10 +17,10 @@ class _ReviewDashboardState extends State<_ReviewDashboard> {
   /// function called to start reviewing cards
   review() => widget.whileChange(() => Navigator.push(
         context,
-        ReviewScreen.route(widget.deckDao.pickCards(
+        ReviewScreen(widget.deckDao.pickCards(
           PickCardsAlgo.lowestWeights,
           numCards: 3,
-        )),
+        )).route,
       ).then((reviewResult) => setState(() {
             testCards = reviewResult ?? [];
           })));

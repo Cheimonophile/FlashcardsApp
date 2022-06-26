@@ -2,30 +2,18 @@ import 'package:flashcards_app/app.dart';
 import 'package:flashcards_app/src/backend/deck_data_access.dart';
 import 'package:flashcards_app/src/frontend/card_display.dart';
 import 'package:flashcards_app/src/frontend/dialogs.dart';
-import 'package:flashcards_app/src/frontend/screen_state.dart';
+import 'package:flashcards_app/src/frontend/screen.dart';
 import 'package:flashcards_app/src/frontend/visual_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
-class ReviewScreen extends StatefulWidget {
+class ReviewScreen extends Screen {
   final List<MetaCard> metaCards;
   final FlipDirection? flipDirection;
 
   /// constructor constructs
   const ReviewScreen(this.metaCards, {super.key, this.flipDirection});
-
-  /// get the route for the review screen
-  static MaterialPageRoute<List<MetaCard>> route(
-    List<MetaCard> metaCards, {
-    FlipDirection? flipDirection,
-  }) =>
-      MaterialPageRoute(
-        builder: (context) => ReviewScreen(
-          metaCards,
-          flipDirection: flipDirection,
-        ),
-      );
 
   @override
   State<ReviewScreen> createState() => _ReviewScreenState();
