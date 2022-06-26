@@ -42,18 +42,19 @@ class _CardsDashboardState extends State<_CardsDashboard> {
 
   /// create a new card
   Future _newCard() => widget.whileChange(() async {
-        return Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => NewCardScreen(widget.deckDao),
-          ),
-        );
+        if (mounted) {
+          return Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => NewCardScreen(widget.deckDao),
+            ),
+          );
+        }
       });
 
   /// deletes cards
   Future _deleteCards() => widget.whileChange(() async {
         var hasPermission = await Dialogs.permission(
-          context,
           "Are you sure you want to delete these cards?",
         );
         if (hasPermission != true) {

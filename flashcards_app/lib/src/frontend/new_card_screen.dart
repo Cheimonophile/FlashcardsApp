@@ -41,7 +41,7 @@ class _NewCardScreenState extends State<NewCardScreen> {
   Future<T> _action<T>(Future<T> Function() f) async {
     setState(() => disabled++);
     return f().catchError((e) {
-      Dialogs.alert(context, e.toString());
+      Dialogs.alert(e.toString());
     }).whenComplete(() {
       setState(() => disabled--);
     });

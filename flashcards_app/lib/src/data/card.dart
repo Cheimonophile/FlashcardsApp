@@ -13,9 +13,9 @@ class Card {
   static const double maxScore = 7;
 
   // data
-  final String frontText;
-  final String backText;
-  final double score;
+  String frontText;
+  String backText;
+  double score;
 
   // constructor
   Card({

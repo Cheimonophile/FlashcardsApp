@@ -15,12 +15,15 @@ class _ReviewDashboardState extends State<_ReviewDashboard> {
   List<MetaCard> testCards = [];
 
   /// function called to start reviewing cards
-  review() => widget.whileChange(() async {
-        setState(() {
-          testCards = widget.deckDao
-              .pickCards(PickCardsAlgo.lowestWeights, numCards: 3);
-        });
-      });
+  review() => widget.whileChange(() => Navigator.push(
+        context,
+        ReviewScreen.route(widget.deckDao.pickCards(
+          PickCardsAlgo.lowestWeights,
+          numCards: 3,
+        )),
+      ).then((reviewResult) => setState(() {
+            testCards = reviewResult ?? [];
+          })));
 
   /// buttons for command window
   late final Map<String, Function()> buttons = {"Review": review};

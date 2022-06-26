@@ -2,11 +2,13 @@ library flashcards_app.frontend.deck_dashboard_screen;
 
 import 'dart:io';
 
+import 'package:flashcards_app/app.dart';
 import 'package:flashcards_app/src/algorithms/pick_cards.dart';
 import 'package:flashcards_app/src/backend/app_data_access.dart';
 import 'package:flashcards_app/src/backend/deck_data_access.dart';
 import 'package:flashcards_app/src/frontend/dialogs.dart';
 import 'package:flashcards_app/src/frontend/new_card_screen.dart';
+import 'package:flashcards_app/src/frontend/review_screen.dart';
 import 'package:flashcards_app/src/frontend/visual_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -27,6 +29,11 @@ class DeckDashboardScreen extends StatefulWidget {
   final String path;
   final DeckDao deckDao;
 
+  static MaterialPageRoute route(String path, DeckDao deckDao) =>
+      MaterialPageRoute(
+        builder: (context) => DeckDashboardScreen(path, deckDao),
+      );
+
   @override
   State<DeckDashboardScreen> createState() => _DeckDashboardScreenState();
 }
@@ -41,12 +48,12 @@ class _DeckDashboardScreenState extends State<DeckDashboardScreen> {
   CardsTableController cardsTableController = CardsTableController();
 
   /// function that locks the ui while performing operations
-  Future<T> _action<T>(Future<T> Function() f) async {
+  Future<T> _action<T>(Future<T> Function() f) {
     setState(() {
       disabled++;
     });
     return f().catchError((e) {
-      Dialogs.alert(context, e.toString());
+      Dialogs.alert(e.toString());
     }).whenComplete(() {
       setState(() => disabled--);
       cardsTableController.clearSelected();
@@ -84,23 +91,22 @@ class _DeckDashboardScreenState extends State<DeckDashboardScreen> {
 
   @override
   Widget build(BuildContext context) => IgnorePointer(
-    ignoring: disabled > 0,
-    child: Scaffold(
-        appBar: AppBar(
-            title: Text(fileName)),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: pages[pageIndex].pageBuilder(),
-        ),
-        bottomNavigationBar: BottomAppBar(
-          child: NavBar(
-            currentPageIndex: pageIndex,
-            pageNames: pages.map((page) => page.name).toList(),
-            onPressed: (newPageIndex) =>
-                setState(() => pageIndex = newPageIndex),
-          ),
-        )),
-  );
+        ignoring: disabled > 0,
+        child: Scaffold(
+            appBar: AppBar(title: Text(fileName)),
+            body: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: pages[pageIndex].pageBuilder(),
+            ),
+            bottomNavigationBar: BottomAppBar(
+              child: NavBar(
+                currentPageIndex: pageIndex,
+                pageNames: pages.map((page) => page.name).toList(),
+                onPressed: (newPageIndex) =>
+                    setState(() => pageIndex = newPageIndex),
+              ),
+            )),
+      );
 }
 
 class _NavBarItem {
