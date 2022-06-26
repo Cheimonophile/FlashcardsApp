@@ -8,6 +8,7 @@ import 'package:flashcards_app/src/backend/app_data_access.dart';
 import 'package:flashcards_app/src/backend/deck_data_access.dart';
 import 'package:flashcards_app/src/data/config.dart';
 import 'package:flashcards_app/src/data/deck.dart';
+import 'package:flashcards_app/src/frontend/screen_state.dart';
 import 'package:flutter/material.dart';
 
 import 'deck_dashboard_screen.dart';
@@ -20,27 +21,15 @@ class DeckSelectionScreen extends StatefulWidget {
   State<DeckSelectionScreen> createState() => _DeckSelectionScreenState();
 }
 
-class _DeckSelectionScreenState extends State<DeckSelectionScreen> {
-  // state
-  int disabled = 0;
+class _DeckSelectionScreenState extends ScreenState<DeckSelectionScreen> {
 
   // constructor
   _DeckSelectionScreenState();
 
-  /// function that locks the ui while performing operations
-  Future<T> _action<T>(Future<T> Function() f) {
-    setState(() => disabled++);
-    return f().catchError((e) {
-      Dialogs.alert(e.toString());
-    }).whenComplete(() {
-      setState(() => disabled--);
-    });
-  }
-
   /// callback when a file is dragged into the frame
   ///
   /// Returns a Widget that should be pushed onto the navigator
-  _onFilesDragged(DropDoneDetails details) => _action(() async {
+  onFilesDragged(DropDoneDetails details) => lock(() async {
         var deckDaos = await AppDao.deckDrop(details);
         if (deckDaos == null) {
           throw Exception("Something went wrong opening the deckfile");
@@ -60,17 +49,14 @@ class _DeckSelectionScreenState extends State<DeckSelectionScreen> {
       });
 
   @override
-  Widget build(BuildContext context) {
-    return IgnorePointer(
-      ignoring: disabled > 0,
-      child: Scaffold(
-        appBar: AppBar(title: const Text("Decks")),
-        body: DropTarget(
-          onDragDone: _onFilesDragged,
-          child: const Padding(
-            padding: EdgeInsets.all(32.0),
-            child: Center(child: Text("Drag deckfile to open")),
-          ),
+  buildScreen(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("Decks")),
+      body: DropTarget(
+        onDragDone: onFilesDragged,
+        child: const Padding(
+          padding: EdgeInsets.all(32.0),
+          child: Center(child: Text("Drag deckfile to open")),
         ),
       ),
     );

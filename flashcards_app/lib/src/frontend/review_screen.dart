@@ -2,6 +2,7 @@ import 'package:flashcards_app/app.dart';
 import 'package:flashcards_app/src/backend/deck_data_access.dart';
 import 'package:flashcards_app/src/frontend/card_display.dart';
 import 'package:flashcards_app/src/frontend/dialogs.dart';
+import 'package:flashcards_app/src/frontend/screen_state.dart';
 import 'package:flashcards_app/src/frontend/visual_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -30,9 +31,8 @@ class ReviewScreen extends StatefulWidget {
   State<ReviewScreen> createState() => _ReviewScreenState();
 }
 
-class _ReviewScreenState extends State<ReviewScreen> {
+class _ReviewScreenState extends ScreenState<ReviewScreen> {
   // view state fields
-  int disabled = 0;
   FlipPosition flipPosition = FlipPosition.unflipped;
 
   // review fields
@@ -59,49 +59,37 @@ class _ReviewScreenState extends State<ReviewScreen> {
     super.initState();
   }
 
-  /// next card
-
-  /// function that locks the ui while performing operations
-  Future<T> _action<T>(Future<T> Function() f) async {
-    setState(() {
-      disabled++;
-    });
-    return f().catchError((e) {
-      Dialogs.alert(e.toString());
-    }).whenComplete(() {
-      setState(() => disabled--);
-    });
-  }
+  /// test function
+  void test(bool Function() f) {}
 
   /// makes all modifications to the cards and returns them with pop
-  Future back() => _action(() async {
-        // bool? hasPermission = notDone.isEmpty ||
-        //     (await Dialogs.permission(
-        //           "Are you sure you want to quit reviewing?\nYou haven't seen all of the cards yet.",
-        //         ) ??
-        //         false);
-        // if (hasPermission != true) {
-        //   return false;
-        // }
-        if (mounted) {
-          return Navigator.pop<List<MetaCard>>(context,[]);
+  Future back() => lock(() async {
+        // ask for permission
+        bool? hasPermission = notDone.isEmpty ||
+            (await Dialogs.permission(
+                  "Are you sure you want to quit reviewing?\nYou haven't seen all of the cards yet.",
+                ) ??
+                false);
+        if (hasPermission != true) {
+          return;
         }
-        
+        if (mounted) {
+          return Navigator.pop<List<MetaCard>>(context, []);
+        }
       });
 
   @override
-  Widget build(BuildContext context) => IgnorePointer(
-        ignoring: disabled > 0,
-        child: Scaffold(
-          appBar: AppBar(
-            leading: BackButton(onPressed: back,), // TextButton(onPressed: back, child: Text("back")),
-            automaticallyImplyLeading: false,
-            title: const Text("Review"),
-          ),
-          body: Util.todo,
-          bottomNavigationBar: Util.todo,
-        ),
-      );
+  Scaffold buildScreen(BuildContext context) => Scaffold(
+    appBar: AppBar(
+      leading: BackButton(
+        onPressed: back,
+      ), // TextButton(onPressed: back, child: Text("back")),
+      automaticallyImplyLeading: false,
+      title: const Text("Review"),
+    ),
+    body: Util.todo,
+    bottomNavigationBar: Util.todo,
+  );
 }
 
 class ReviewCard {
