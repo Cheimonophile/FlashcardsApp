@@ -1,11 +1,13 @@
 part of flashcards_app.frontend.deck_dashboard_screen;
 
-class _ReviewDashboard extends StatefulWidget {
-  const _ReviewDashboard(this.deckDao, {Key? key, required this.whileChange})
+class _ReviewDashboard extends StatefulWidget
+    with ScreenChild<DeckDashboardScreen> {
+  const _ReviewDashboard(this.screen, this.deckDao, {Key? key})
       : super(key: key);
 
+  @override
+  final _DeckDashboardScreenState screen;
   final DeckDao deckDao;
-  final Future Function(Future Function()) whileChange;
 
   @override
   State<_ReviewDashboard> createState() => _ReviewDashboardState();
@@ -14,16 +16,22 @@ class _ReviewDashboard extends StatefulWidget {
 class _ReviewDashboardState extends State<_ReviewDashboard> {
   List<MetaCard> testCards = [];
 
+  /// get the screen
+  _DeckDashboardScreenState get screen => widget.screen;
+
   /// function called to start reviewing cards
-  review() => widget.whileChange(() => Navigator.push(
-        context,
-        ReviewScreen(widget.deckDao.pickCards(
-          PickCardsAlgo.lowestWeights,
-          numCards: 3,
-        )).route,
-      ).then((reviewResult) => setState(() {
-            testCards = reviewResult ?? [];
-          })));
+  review() => screen.lock(
+        () => screen
+            .pushRoute(
+              ReviewScreen(widget.deckDao.pickCards(
+                PickCardsAlgo.lowestWeights,
+                numCards: 3,
+              )).route,
+            )
+            .then((reviewResult) => setState(() {
+                  testCards = reviewResult ?? [];
+                })),
+      );
 
   /// buttons for command window
   late final Map<String, Function()> buttons = {"Review": review};

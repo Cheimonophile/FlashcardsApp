@@ -66,3 +66,8 @@ abstract class ScreenState<ScreenType extends Screen<ScreenResult>,
   /// builds the screen
   Scaffold buildScreen(BuildContext context);
 }
+
+
+mixin ScreenChild<ScreenType extends Screen> {
+  ScreenState<ScreenType, dynamic> get screen;
+}

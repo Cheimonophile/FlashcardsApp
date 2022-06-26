@@ -56,9 +56,8 @@ class _DeckDashboardScreenState extends ScreenState<DeckDashboardScreen, dynamic
   late List<_NavBarItem> pages = [
     _NavBarItem(
         "Review",
-        () => _ReviewDashboard(
+        () => _ReviewDashboard(this,
               widget.deckDao,
-              whileChange: (f) => lock(f),
             )),
     _NavBarItem("Deck", () => const Text("Deck")),
     _NavBarItem(
