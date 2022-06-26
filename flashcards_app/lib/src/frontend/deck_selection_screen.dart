@@ -21,8 +21,8 @@ class DeckSelectionScreen extends Screen {
   State<DeckSelectionScreen> createState() => _DeckSelectionScreenState();
 }
 
-class _DeckSelectionScreenState extends ScreenState<DeckSelectionScreen, dynamic> {
-
+class _DeckSelectionScreenState
+    extends ScreenState<DeckSelectionScreen, dynamic> {
   // constructor
   _DeckSelectionScreenState();
 
@@ -40,12 +40,9 @@ class _DeckSelectionScreenState extends ScreenState<DeckSelectionScreen, dynamic
         if (details.files.length > 1) {
           throw Exception("Too many files dropped");
         }
-        if (mounted) {
-          return Navigator.push(
-            context,
-            DeckDashboardScreen(details.files[0].path, deckDaos[0]).route,
-          );
-        }
+        pushRoute(
+          DeckDashboardScreen(details.files[0].path, deckDaos[0]).route,
+        );
       });
 
   @override

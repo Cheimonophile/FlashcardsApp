@@ -1,3 +1,5 @@
+library flashcards_app.frontend.screen;
+
 import 'dart:async';
 
 import 'package:flashcards_app/src/frontend/dialogs.dart';
@@ -14,7 +16,8 @@ abstract class Screen<ScreenReturn> extends StatefulWidget {
 }
 
 /// class includes a bunch of would-be boilerplate for
-abstract class ScreenState<ScreenType extends Screen<ScreenResult>, ScreenResult> extends State<ScreenType> {
+abstract class ScreenState<ScreenType extends Screen<ScreenResult>,
+    ScreenResult> extends State<ScreenType> {
   /// function that locks the ui while performing operations
   ///
   /// also catches exceptions in the operations and alerts the user to them
@@ -33,15 +36,25 @@ abstract class ScreenState<ScreenType extends Screen<ScreenResult>, ScreenResult
     });
   }
 
-  /// pop function calls navigator.pop with return value
-  /// 
+  /// function calls Navigator.push
+  ///
+  /// makes sure the widget is mounted
+  Future<ScreenResult?> pushRoute<ScreenResult>(MaterialPageRoute<ScreenResult> route) async {
+    if (mounted) {
+      return Navigator.push(context, route);
+    }
+    return null;
+  }
+
+  /// function calls Navigator.pop with return value
+  ///
   /// makes sure the widget is mounted
   @nonVirtual
-  pop(ScreenResult result) {
-    if(mounted) {
-      Navigator.pop(context, result);
+  popRoute([ScreenResult? result]) {
+    if (mounted) {
+      Navigator.pop<ScreenResult>(context, result);
     }
-  } 
+  }
 
   @override
   @nonVirtual

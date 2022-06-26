@@ -45,9 +45,6 @@ class _ReviewScreenState extends ScreenState<ReviewScreen, List<MetaCard>> {
     super.initState();
   }
 
-  /// test function
-  void test(bool Function() f) {}
-
   /// makes all modifications to the cards and returns them with pop
   Future back() => lock(() async {
         // ask for permission
@@ -60,7 +57,7 @@ class _ReviewScreenState extends ScreenState<ReviewScreen, List<MetaCard>> {
           return;
         }
         if (mounted) {
-          return pop([]);
+          return popRoute();
         }
       });
 
