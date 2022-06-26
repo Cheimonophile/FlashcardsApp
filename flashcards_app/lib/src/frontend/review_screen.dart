@@ -5,10 +5,8 @@ import 'package:flashcards_app/src/frontend/dialogs.dart';
 import 'package:flashcards_app/src/frontend/screen.dart';
 import 'package:flashcards_app/src/frontend/visual_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
-class ReviewScreen extends Screen {
+class ReviewScreen extends Screen<List<MetaCard>> {
   final List<MetaCard> metaCards;
   final FlipDirection? flipDirection;
 
@@ -19,7 +17,7 @@ class ReviewScreen extends Screen {
   State<ReviewScreen> createState() => _ReviewScreenState();
 }
 
-class _ReviewScreenState extends ScreenState<ReviewScreen> {
+class _ReviewScreenState extends ScreenState<ReviewScreen, List<MetaCard>> {
   // view state fields
   FlipPosition flipPosition = FlipPosition.unflipped;
 
@@ -62,7 +60,7 @@ class _ReviewScreenState extends ScreenState<ReviewScreen> {
           return;
         }
         if (mounted) {
-          return Navigator.pop<List<MetaCard>>(context, []);
+          return pop([]);
         }
       });
 

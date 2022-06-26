@@ -4,9 +4,6 @@ import 'package:flashcards_app/src/frontend/dialogs.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-
-
-
 abstract class Screen<ScreenReturn> extends StatefulWidget {
   const Screen({super.key});
 
@@ -16,14 +13,13 @@ abstract class Screen<ScreenReturn> extends StatefulWidget {
       );
 }
 
-
-/// class includes a bunch of would-be boilerplate for 
-abstract class ScreenState<StatefulWidgetType extends StatefulWidget> extends State<StatefulWidgetType> {
-
+/// class includes a bunch of would-be boilerplate for
+abstract class ScreenState<ScreenType extends Screen<ScreenResult>, ScreenResult> extends State<ScreenType> {
   /// function that locks the ui while performing operations
-  /// 
+  ///
   /// also catches exceptions in the operations and alerts the user to them
   int disabled = 0;
+  @nonVirtual
   Future<T> lock<T>(Future<T> Function() f) {
     setState(() {
       disabled++;
@@ -36,6 +32,16 @@ abstract class ScreenState<StatefulWidgetType extends StatefulWidget> extends St
       }
     });
   }
+
+  /// pop function calls navigator.pop with return value
+  /// 
+  /// makes sure the widget is mounted
+  @nonVirtual
+  pop(ScreenResult result) {
+    if(mounted) {
+      Navigator.pop(context, result);
+    }
+  } 
 
   @override
   @nonVirtual

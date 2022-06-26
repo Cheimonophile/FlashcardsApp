@@ -24,22 +24,17 @@ part 'deck_dashboard_screen/cards_dashboard.dart';
 part 'deck_dashboard_screen/card_row.dart';
 part 'deck_dashboard_screen/review_dashboard.dart';
 
-class DeckDashboardScreen extends StatefulWidget {
+class DeckDashboardScreen extends Screen {
   const DeckDashboardScreen(this.path, this.deckDao, {super.key});
 
   final String path;
   final DeckDao deckDao;
 
-  static MaterialPageRoute route(String path, DeckDao deckDao) =>
-      MaterialPageRoute(
-        builder: (context) => DeckDashboardScreen(path, deckDao),
-      );
-
   @override
   State<DeckDashboardScreen> createState() => _DeckDashboardScreenState();
 }
 
-class _DeckDashboardScreenState extends ScreenState<DeckDashboardScreen> {
+class _DeckDashboardScreenState extends ScreenState<DeckDashboardScreen, dynamic> {
   late String fileName = path.basename(File(widget.path).path);
   int pageIndex = 0;
 

@@ -14,14 +14,14 @@ import 'package:flutter/material.dart';
 import 'deck_dashboard_screen.dart';
 import 'dialogs.dart';
 
-class DeckSelectionScreen extends StatefulWidget {
+class DeckSelectionScreen extends Screen {
   const DeckSelectionScreen({super.key});
 
   @override
   State<DeckSelectionScreen> createState() => _DeckSelectionScreenState();
 }
 
-class _DeckSelectionScreenState extends ScreenState<DeckSelectionScreen> {
+class _DeckSelectionScreenState extends ScreenState<DeckSelectionScreen, dynamic> {
 
   // constructor
   _DeckSelectionScreenState();
@@ -43,7 +43,7 @@ class _DeckSelectionScreenState extends ScreenState<DeckSelectionScreen> {
         if (mounted) {
           return Navigator.push(
             context,
-            DeckDashboardScreen.route(details.files[0].path, deckDaos[0]),
+            DeckDashboardScreen(details.files[0].path, deckDaos[0]).route,
           );
         }
       });
