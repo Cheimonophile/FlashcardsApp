@@ -1,3 +1,4 @@
+import 'package:flashcards_app/src/algorithms/pick_cards.dart';
 import 'package:flashcards_app/src/frontend/visual_utils.dart';
 import 'package:flutter/material.dart' hide Card;
 import 'package:flutter/src/foundation/key.dart';
@@ -25,7 +26,7 @@ class CardDisplay extends StatelessWidget {
           case FlipPosition.unflipped:
             return _CardFront2BackUnflipped(card);
           case FlipPosition.flipped:
-            return _CardFront2BackUnflipped(card);
+            return _CardFront2BackFlipped(card);
         }
       case FlipDirection.back2front:
         switch (flipPosition) {
@@ -38,8 +39,8 @@ class CardDisplay extends StatelessWidget {
   }
 }
 
-class _CardFront2BackUnflipped extends StatelessWidget {
-  const _CardFront2BackUnflipped(this.card, {super.key});
+class _CardFront2BackFlipped extends StatelessWidget {
+  const _CardFront2BackFlipped(this.card, {super.key});
 
   final Card card;
 
@@ -51,8 +52,8 @@ class _CardFront2BackUnflipped extends StatelessWidget {
       ]);
 }
 
-class _CardFront2BackFlipped extends StatelessWidget {
-  const _CardFront2BackFlipped(this.card, {super.key});
+class _CardFront2BackUnflipped extends StatelessWidget {
+  const _CardFront2BackUnflipped(this.card, {super.key});
 
   final Card card;
 
@@ -61,8 +62,8 @@ class _CardFront2BackFlipped extends StatelessWidget {
       Column(children: [Expanded(child: _CardText(card.frontText))]);
 }
 
-class _CardBack2FrontUnflipped extends StatelessWidget {
-  const _CardBack2FrontUnflipped(this.card, {super.key});
+class _CardBack2FrontFlipped extends StatelessWidget {
+  const _CardBack2FrontFlipped(this.card, {super.key});
 
   final Card card;
 
@@ -74,8 +75,8 @@ class _CardBack2FrontUnflipped extends StatelessWidget {
       ]);
 }
 
-class _CardBack2FrontFlipped extends StatelessWidget {
-  const _CardBack2FrontFlipped(this.card, {super.key});
+class _CardBack2FrontUnflipped extends StatelessWidget {
+  const _CardBack2FrontUnflipped(this.card, {super.key});
 
   final Card card;
 
@@ -95,12 +96,6 @@ class _CardText extends StatelessWidget {
         text,
         textAlign: TextAlign.center,
       ));
-}
-
-/// the flip direction of the card
-enum FlipDirection {
-  front2back,
-  back2front,
 }
 
 /// the flip position of the card

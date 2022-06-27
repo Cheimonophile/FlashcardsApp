@@ -6,6 +6,8 @@ import 'package:flashcards_app/app.dart';
 import 'package:flashcards_app/src/algorithms/pick_cards.dart';
 import 'package:flashcards_app/src/backend/app_data_access.dart';
 import 'package:flashcards_app/src/backend/deck_data_access.dart';
+import 'package:flashcards_app/src/data/card.dart';
+import 'package:flashcards_app/src/frontend/card_display.dart';
 import 'package:flashcards_app/src/frontend/dialogs.dart';
 import 'package:flashcards_app/src/frontend/new_card_screen.dart';
 import 'package:flashcards_app/src/frontend/review_screen.dart';

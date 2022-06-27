@@ -1,20 +1,34 @@
 library flashcards_app.algorithms.pick_cards;
 
+import 'dart:convert';
+
 import 'package:flashcards_app/src/backend/deck_data_access.dart';
 import 'package:flashcards_app/src/data/card.dart';
+import 'package:flashcards_app/src/frontend/card_display.dart';
 
 /// enum with valid
 class PickCardsAlgo {
-  final Iterable<MetaCard> Function(int, Iterable<MetaCard>) pick;
+  final Iterable<ReviewCard> Function(int, Iterable<MetaCard>,
+      [FlipDirection? flipDirection]) pick;
 
   // private constructor
   PickCardsAlgo._(this.pick);
 
   /// pick function picks the lowest weighted cards
   static PickCardsAlgo get lowestWeights => PickCardsAlgo._(
-        (numCards, metaCards) => (metaCards.toList()
-              ..shuffle()
-              ..sort((a, b) => a.card.score <= b.card.score ? -1 : 1))
-            .sublist(0, numCards),
+        (numCards, metaCards, [flipDirection]) {
+          var reviewCards = metaCards
+              .expand((metaCard) => [
+                    ReviewCard(metaCard, FlipDirection.front2back),
+                    ReviewCard(metaCard, FlipDirection.back2front),
+                  ])
+              .where((reviewCard) =>
+                  flipDirection == null ||
+                  reviewCard.flipDirection == flipDirection)
+              .toList()
+            ..shuffle()
+            ..sort((a, b) => a.score < b.score ? -1 : 1);
+          return reviewCards.sublist(0, numCards);
+        },
       );
 }

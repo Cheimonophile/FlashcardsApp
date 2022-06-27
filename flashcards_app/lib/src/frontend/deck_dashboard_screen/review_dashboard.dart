@@ -13,27 +13,40 @@ class _ReviewDashboard extends StatefulWidget {
 }
 
 class _ReviewDashboardState extends State<_ReviewDashboard> {
-  List<MetaCard> testCards = [];
+  List<ReviewCard> testCards = [];
 
-  /// get the screen
+  /// get the screen∏
   _DeckDashboardScreenState get screen => widget.screen;
 
   /// function called to start reviewing cards
   review() => screen.lock(
-        () => screen
-            .pushRoute(
-              ReviewScreen(widget.deckDao.pickCards(
-                PickCardsAlgo.lowestWeights,
-                numCards: 3,
-              )).route,
-            )
-            .then((reviewResult) => setState(() {
-                  testCards = reviewResult ?? [];
-                })),
+        () async => testCards = widget.deckDao.pickCards(
+          PickCardsAlgo.lowestWeights,
+          numCards: 1,
+          flipDirection: FlipDirection.front2back,
+        ),
+        // () => screen
+        //     .pushRoute(ReviewScreen(widget.deckDao.pickCards(
+        //       PickCardsAlgo.lowestWeights,
+        //       numCards: 1,
+        //       flipDirection: FlipDirection.front2back,
+        //     )).route)
+        //     .then((reviewResult) => setState(() {
+        //           testCards = [];
+        //         }))
+        //     .then((reviewResult) => setState(() {
+        //           testCards = widget.deckDao.pickCards(
+        //             PickCardsAlgo.lowestWeights,
+        //             numCards: 1,
+        //             flipDirection: FlipDirection.front2back,
+        //           );
+        //         })),
       );
 
   /// buttons for command window
-  late final Map<String, Function()> buttons = {"Review": review};
+  late final Map<String, Function()> buttons = {
+    "Review": review,
+  };
 
   @override
   Widget build(BuildContext context) => Row(
@@ -55,14 +68,13 @@ class _ReviewDashboardState extends State<_ReviewDashboard> {
           const VerticalDivider(),
           // main area
           Expanded(
-            child: ListView(
-              children: testCards
-                  .map((testCard) => Text(
-                        _CardRow.formatCardText(testCard.card.frontText),
-                        overflow: TextOverflow.ellipsis,
-                      ))
-                  .toList(),
-            ),
+            child: testCards.isEmpty
+                ? Util.wheel
+                : CardDisplay(
+                    testCards[0].metaCard.card,
+                    flipDirection: testCards[0].flipDirection,
+                    flipPosition: FlipPosition.unflipped,
+                  ),
           ),
         ],
       );

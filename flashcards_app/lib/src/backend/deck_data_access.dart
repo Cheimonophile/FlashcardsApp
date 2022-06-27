@@ -4,6 +4,7 @@ import 'package:flashcards_app/src/algorithms/pick_cards.dart';
 import 'package:flashcards_app/src/backend/app_data_access.dart';
 import 'package:flashcards_app/src/data/card.dart';
 import 'package:flashcards_app/src/data/deck.dart';
+import 'package:flashcards_app/src/frontend/card_display.dart';
 
 class DeckDao {
   final Deck _deck;
@@ -50,21 +51,14 @@ class DeckDao {
       });
 
   /// picks a list of cards for review
-  List<MetaCard> pickCards(PickCardsAlgo algo, {int? numCards}) {
+  List<ReviewCard> pickCards(PickCardsAlgo algo, {int? numCards, FlipDirection? flipDirection}) {
    numCards ??= _deck.cards.length;
    if(numCards > _deck.cards.length) {
     throw Exception("Can't pick $numCards cards from a deck with only ${_deck.cards.length} cards");
    }
-   return algo.pick(numCards, cards()).toList();
+   return algo.pick(numCards, cards(), flipDirection).toList();
   }
 
   /// Json Serialization
   String getJson() => jsonEncode(_deck.toJson());
-}
-
-/// stores a card along with some metadata
-class MetaCard {
-  final int index;
-  final Card card;
-  MetaCard(this.index, this.card);
 }
