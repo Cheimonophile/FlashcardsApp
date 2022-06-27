@@ -14,7 +14,7 @@ class ReviewScreen extends Screen<List<MetaCard>> {
   const ReviewScreen(this.metaCards, {super.key, this.flipDirection});
 
   @override
-  State<ReviewScreen> createState() => _ReviewScreenState();
+  createState() => _ReviewScreenState();
 }
 
 class _ReviewScreenState extends ScreenState<ReviewScreen, List<MetaCard>> {

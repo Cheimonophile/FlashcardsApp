@@ -1,7 +1,6 @@
 part of flashcards_app.frontend.deck_dashboard_screen;
 
-class _ReviewDashboard extends StatefulWidget
-    with ScreenChild<DeckDashboardScreen> {
+class _ReviewDashboard extends StatefulWidget {
   const _ReviewDashboard(this.screen, this.deckDao, {Key? key})
       : super(key: key);
 

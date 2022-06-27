@@ -18,11 +18,10 @@ class DeckSelectionScreen extends Screen {
   const DeckSelectionScreen({super.key});
 
   @override
-  State<DeckSelectionScreen> createState() => _DeckSelectionScreenState();
+  createState() => _DeckSelectionScreenState();
 }
 
-class _DeckSelectionScreenState
-    extends ScreenState<DeckSelectionScreen, dynamic> {
+class _DeckSelectionScreenState extends ScreenState<DeckSelectionScreen, dynamic> {
   // constructor
   _DeckSelectionScreenState();
 
@@ -42,7 +41,7 @@ class _DeckSelectionScreenState
         }
         pushRoute(
           DeckDashboardScreen(details.files[0].path, deckDaos[0]).route,
-        );
+        ).then((e) {});
       });
 
   @override

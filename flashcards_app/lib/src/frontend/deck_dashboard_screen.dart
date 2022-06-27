@@ -31,7 +31,7 @@ class DeckDashboardScreen extends Screen {
   final DeckDao deckDao;
 
   @override
-  State<DeckDashboardScreen> createState() => _DeckDashboardScreenState();
+  createState() => _DeckDashboardScreenState();
 }
 
 class _DeckDashboardScreenState extends ScreenState<DeckDashboardScreen, dynamic> {

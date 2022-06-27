@@ -2,22 +2,30 @@ library flashcards_app.frontend.screen;
 
 import 'dart:async';
 
+import 'package:flashcards_app/app.dart';
 import 'package:flashcards_app/src/frontend/dialogs.dart';
+import 'package:flashcards_app/src/frontend/push_pop.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-abstract class Screen<ScreenReturn> extends StatefulWidget {
+abstract class Screen<ScreenResult> extends StatefulWidget
+    with PushPop<ScreenResult> {
   const Screen({super.key});
 
   /// get the route for the review screen
-  MaterialPageRoute<ScreenReturn> get route => MaterialPageRoute(
+  MaterialPageRoute<ScreenResult> get route => MaterialPageRoute(
         builder: (context) => this,
       );
+
+  /// get the delegate to pass around
+  @override
+  ScreenState<Screen<ScreenResult>, ScreenResult> createState();
 }
 
 /// class includes a bunch of would-be boilerplate for
 abstract class ScreenState<ScreenType extends Screen<ScreenResult>,
     ScreenResult> extends State<ScreenType> {
+
   /// function that locks the ui while performing operations
   ///
   /// also catches exceptions in the operations and alerts the user to them
@@ -39,7 +47,9 @@ abstract class ScreenState<ScreenType extends Screen<ScreenResult>,
   /// function calls Navigator.push
   ///
   /// makes sure the widget is mounted
-  Future<ScreenResult?> pushRoute<ScreenResult>(MaterialPageRoute<ScreenResult> route) async {
+  @nonVirtual
+  Future<PushScreenResult?> pushRoute<PushScreenResult>(
+      MaterialPageRoute<PushScreenResult> route) async {
     if (mounted) {
       return Navigator.push(context, route);
     }
@@ -67,7 +77,16 @@ abstract class ScreenState<ScreenType extends Screen<ScreenResult>,
   Scaffold buildScreen(BuildContext context);
 }
 
-
-mixin ScreenChild<ScreenType extends Screen> {
-  ScreenState<ScreenType, dynamic> get screen;
+/// carries around screen functions so they can be passed to children
+class ScreenDelegate<ScreenResult> {
+  Future<T> Function<T>(Future<T> Function() f) lock;
+  Future<PushScreenResult?> Function<PushScreenResult>(
+      MaterialPageRoute<PushScreenResult> route) pushRoute;
+  Function([ScreenResult? result]) popRoute;
+  ScreenDelegate({
+    required this.lock,
+    required this.pushRoute,
+    required this.popRoute,
+  });
 }
+
