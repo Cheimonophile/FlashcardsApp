@@ -9,7 +9,7 @@ import 'package:flashcards_app/src/frontend/screen.dart';
 import 'package:flashcards_app/src/frontend/visual_utils.dart';
 import 'package:flutter/material.dart';
 
-class ReviewScreen extends Screen<List<MetaCard>> {
+class ReviewScreen extends Screen<List<ReviewCard>> {
   final List<ReviewCard> reviewCards;
 
   /// constructor constructs
@@ -19,7 +19,7 @@ class ReviewScreen extends Screen<List<MetaCard>> {
   createState() => _ReviewScreenState();
 }
 
-class _ReviewScreenState extends ScreenState<ReviewScreen, List<MetaCard>> {
+class _ReviewScreenState extends ScreenState<ReviewScreen, List<ReviewCard>> {
   // view state fields
   FlipPosition flipPosition = FlipPosition.unflipped;
 
@@ -37,25 +37,37 @@ class _ReviewScreenState extends ScreenState<ReviewScreen, List<MetaCard>> {
 
   /// makes all modifications to the cards and returns them with pop
   Future _backToDashboard() => lock(() async {
-        // ask for permission
-        bool? hasPermission = notDone.isEmpty ||
-            (await Dialogs.permission(
-                  "Are you sure you want to quit reviewing?\nYou haven't seen all of the cards yet.",
-                ) ??
-                false);
-        if (hasPermission != true) {
+        // make sure the user is finished reviewing
+        if (notDone.isEmpty) {
+          popRoute(done);
           return;
         }
-        if (mounted) {
-          return popRoute();
+        // if not done, ask for permission
+        bool hasPermission = await Dialogs.permission(
+              "Are you sure you want to quit reviewing?\nYou haven't seen all of the cards yet.\n(Your progress will not be saved)",
+            ) ??
+            false;
+        if (hasPermission) {
+          popRoute();
         }
       });
 
   /// flips the current card
   _flip() => lock(() async {
-    flipPosition = FlipPosition.flipped;
-  });
+        flipPosition = FlipPosition.flipped;
+      });
 
+  /// judges the card and moves to the next
+  _judge(bool gotCorrect) => lock(() async {
+        notDone[0].timesSeen++;
+        if (gotCorrect) {
+          done.add(notDone[0]);
+        } else {
+          notDone.add(notDone[0]);
+        }
+        notDone.removeAt(0);
+        flipPosition = FlipPosition.unflipped;
+      });
 
   /// Respond to button presses
   _bottomButtonPressed(int buttonIndex) =>
@@ -66,8 +78,8 @@ class _ReviewScreenState extends ScreenState<ReviewScreen, List<MetaCard>> {
     _BottomButton("Flip", _flip),
   ];
   late final List<_BottomButton> _flippedButtons = [
-    _BottomButton("Incorrect", () {}, color: Colors.red),
-    _BottomButton("Correct", () {}, color: Colors.green),
+    _BottomButton("Incorrect", () => _judge(false), color: Colors.red),
+    _BottomButton("Correct", () => _judge(true), color: Colors.green),
   ];
   late final List<_BottomButton> _doneButtons = [
     _BottomButton("Back to Dashboard", _backToDashboard),

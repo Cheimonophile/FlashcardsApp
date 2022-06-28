@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:flashcards_app/app.dart';
 import 'package:flashcards_app/src/algorithms/pick_cards.dart';
+import 'package:flashcards_app/src/algorithms/process_review.dart';
 import 'package:flashcards_app/src/backend/app_data_access.dart';
 import 'package:flashcards_app/src/backend/deck_data_access.dart';
 import 'package:flashcards_app/src/data/card.dart';

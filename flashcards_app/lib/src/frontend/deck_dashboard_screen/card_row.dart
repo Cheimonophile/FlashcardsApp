@@ -16,7 +16,8 @@ class _CardRow extends StatelessWidget {
   }
 
   /// formats the card text for display in the text box
-  static String formatCardText(String cardText) => cardText.replaceAll("\n", "...\t");
+  static String formatCardText(String cardText) =>
+      cardText.replaceAll("\n", "...\t");
 
   @override
   Widget build(BuildContext context) => Row(
@@ -37,18 +38,62 @@ class _CardRow extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Expanded(
-                      child: Text(
-                        formatCardText(metaCard.card.frontText),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.left,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              formatCardText(metaCard.card.frontText),
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: Util.borderRadius,
+                              color: Colors.black,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: Center(
+                                child: Text(
+                                  Util.formatPercent(
+                                      metaCard.card.front2backPercent),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     const VerticalDivider(),
                     Expanded(
-                      child: Text(
-                        formatCardText(metaCard.card.backText),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.left,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              formatCardText(metaCard.card.backText),
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: Util.borderRadius,
+                              color: Colors.black,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: Center(
+                                child: Text(
+                                  Util.formatPercent(
+                                      metaCard.card.back2frontPercent),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],

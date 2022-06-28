@@ -1,6 +1,7 @@
 library flashcards_app.frontend.visual_utils;
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 abstract class Util {
   static Widget wheel = const Padding(
@@ -35,4 +36,11 @@ abstract class Util {
           isDense: true,
         ),
       );
+
+  /// format a percent
+  static final NumberFormat _percentPattern = NumberFormat.percentPattern();
+  static String formatPercent(double value) => _percentPattern.format(value);
+
+  // standard border radius
+  static final BorderRadius borderRadius = BorderRadius.circular(4.0);
 }

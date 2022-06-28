@@ -27,6 +27,10 @@ class Card {
     this.back2frontScore = 0,
   });
 
+  /// get the percent value of the card's score
+  double get front2backPercent => front2backScore / maxScore;
+  double get back2frontPercent => back2frontScore / maxScore;
+
   // JSON functions
   factory Card.fromJson(Map<String, dynamic> json) => _$CardFromJson(json);
   Map<String, dynamic> toJson() => _$CardToJson(this);
@@ -42,15 +46,17 @@ class MetaCard {
 /// Type for holding a review card
 class ReviewCard {
   int timesSeen = 0;
-  bool? gotCorrect;
   final MetaCard metaCard;
   final FlipDirection flipDirection;
   ReviewCard(this.metaCard, this.flipDirection);
 
-  // get the card's score, considering its direction
+  // score accessors abstract card direction
   double get score => flipDirection == FlipDirection.front2back
       ? metaCard.card.front2backScore
       : metaCard.card.back2frontScore;
+  set score(double newScore) => flipDirection == FlipDirection.front2back
+      ? metaCard.card.front2backScore = newScore
+      : metaCard.card.back2frontScore = newScore;
 }
 
 /// the flip direction of the card
