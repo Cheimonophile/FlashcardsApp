@@ -56,8 +56,8 @@ class _CardRow extends StatelessWidget {
                               padding: const EdgeInsets.all(4.0),
                               child: Center(
                                 child: Text(
-                                  Util.formatPercent(
-                                      metaCard.card.front2backPercent),
+                                  metaCard.card.front2backPercent
+                                      .formatPercent(),
                                   textAlign: TextAlign.center,
                                 ),
                               ),
@@ -86,8 +86,8 @@ class _CardRow extends StatelessWidget {
                               padding: const EdgeInsets.all(4.0),
                               child: Center(
                                 child: Text(
-                                  Util.formatPercent(
-                                      metaCard.card.back2frontPercent),
+                                  metaCard.card.back2frontPercent
+                                      .formatPercent(),
                                   textAlign: TextAlign.center,
                                 ),
                               ),

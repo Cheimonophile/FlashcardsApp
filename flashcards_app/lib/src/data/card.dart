@@ -2,6 +2,7 @@ library flashcards_app.data.card;
 
 import 'package:flashcards_app/src/backend/deck_data_access.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'card.g.dart';
@@ -63,4 +64,11 @@ class ReviewCard {
 enum FlipDirection {
   front2back,
   back2front,
+}
+
+/// extension for card percents
+extension CardScore on double {
+  double get percent => this / Card.maxScore;
+  static final NumberFormat _percentPattern = NumberFormat.percentPattern();
+  String formatPercent() => _percentPattern.format(this); /// format a percent
 }
