@@ -101,13 +101,24 @@ class _ReviewScreenState extends ScreenState<ReviewScreen, List<ReviewCard>> {
           automaticallyImplyLeading: false,
           title: const Text("Review"),
         ),
-        body: notDone.isEmpty
-            ? const Center(child: Text("Done!"))
-            : CardDisplay(
-                notDone[0].metaCard.card,
-                flipDirection: notDone[0].flipDirection,
-                flipPosition: flipPosition,
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              IntrinsicHeight(child: _ReviewProgressBar(done, notDone)),
+              Expanded(
+                child: notDone.isEmpty
+                    ? const Center(child: Text("Done!"))
+                    : CardDisplay(
+                        notDone[0].metaCard.card,
+                        flipDirection: notDone[0].flipDirection,
+                        flipPosition: flipPosition,
+                      ),
               ),
+            ],
+          ),
+        ),
         bottomNavigationBar: BottomAppBar(
           child: NavBar(
             pageNames: bottomButtons.map((button) => button.text).toList(),
@@ -123,4 +134,34 @@ class _BottomButton {
   final Function() onPressed;
   final Color? color;
   _BottomButton(this.text, this.onPressed, {this.color});
+}
+
+class _ReviewProgressBar extends StatelessWidget {
+  final List<ReviewCard> done;
+  final List<ReviewCard> notDone;
+  _ReviewProgressBar(this.done, this.notDone, {super.key}) {
+    done.sort((a, b) => a.score < b.score ? -1 : 1);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: Util.borderRadius,
+      child: Container(
+        constraints: const BoxConstraints(minHeight: 16.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: done
+                  .map((reviewCard) => Expanded(
+                      child: ColoredBox(color: reviewCard.score.percent.color)))
+                  .toList() +
+              notDone
+                  .map((reviewCard) => const Expanded(
+                        child: ColoredBox(color: Colors.grey),
+                      ))
+                  .toList(),
+        ),
+      ),
+    );
+  }
 }

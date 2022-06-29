@@ -50,7 +50,7 @@ class _CardRow extends StatelessWidget {
                           Container(
                             decoration: BoxDecoration(
                               borderRadius: Util.borderRadius,
-                              color: Colors.black,
+                              color: metaCard.card.front2backPercent.color,
                             ),
                             child: Padding(
                               padding: const EdgeInsets.all(4.0),
@@ -59,6 +59,7 @@ class _CardRow extends StatelessWidget {
                                   metaCard.card.front2backPercent
                                       .formatPercent(),
                                   textAlign: TextAlign.center,
+                                  style: const TextStyle(color: Colors.black)
                                 ),
                               ),
                             ),
@@ -80,7 +81,7 @@ class _CardRow extends StatelessWidget {
                           Container(
                             decoration: BoxDecoration(
                               borderRadius: Util.borderRadius,
-                              color: Colors.black,
+                              color: metaCard.card.back2frontPercent.color,
                             ),
                             child: Padding(
                               padding: const EdgeInsets.all(4.0),
@@ -89,6 +90,7 @@ class _CardRow extends StatelessWidget {
                                   metaCard.card.back2frontPercent
                                       .formatPercent(),
                                   textAlign: TextAlign.center,
+                                  style: const TextStyle(color: Colors.black)
                                 ),
                               ),
                             ),

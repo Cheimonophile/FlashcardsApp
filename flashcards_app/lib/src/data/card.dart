@@ -1,5 +1,6 @@
 library flashcards_app.data.card;
 
+import 'package:color_models/color_models.dart';
 import 'package:flashcards_app/src/backend/deck_data_access.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -12,10 +13,10 @@ part 'card.g.dart';
 class Card {
   // meta information
   static const double minScore = 0;
-  static const double maxScore = 7;
+  static const double maxScore = 100;
 
   // data
-  String frontText;
+  final String frontText;
   String backText;
   double front2backScore;
   double back2frontScore;
@@ -70,5 +71,14 @@ enum FlipDirection {
 extension CardScore on double {
   double get percent => this / Card.maxScore;
   static final NumberFormat _percentPattern = NumberFormat.percentPattern();
-  String formatPercent() => _percentPattern.format(this); /// format a percent
+  String formatPercent() => _percentPattern.format(this);
+
+  /// format a percent
+  /// get the percent's color
+  Color get color =>
+      HSVColor.lerp(
+        HSVColor.fromColor(Colors.red),
+        HSVColor.fromColor(Colors.green),
+        this,
+      )!.toColor();
 }

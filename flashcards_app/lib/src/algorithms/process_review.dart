@@ -3,7 +3,7 @@ library flashcards_app.algorithms.process_review;
 import 'package:flashcards_app/src/data/card.dart';
 
 class ProcessReviewAlgo {
-  static const int newWeightDivisor = 3;
+  static const int newWeightDivisor = 2;
 
   /// given a reviewCard, applies the results of the review to it's metacard and returns it
   final MetaCard Function(ReviewCard reviewCard) process;
