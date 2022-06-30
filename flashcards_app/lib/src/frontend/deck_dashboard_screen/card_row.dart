@@ -9,9 +9,9 @@ class _CardRow extends StatelessWidget {
   /// function called when checkbox is clicked
   onChanged(bool? newValue) {
     if (newValue == true) {
-      controller.addSelected({metaCard.index});
+      controller.addSelected({metaCard.id});
     } else {
-      controller.removeSelected({metaCard.index});
+      controller.removeSelected({metaCard.id});
     }
   }
 
@@ -25,7 +25,7 @@ class _CardRow extends StatelessWidget {
           // check box
           IntrinsicHeight(
             child: Checkbox(
-              value: controller.selected.contains(metaCard.index),
+              value: controller.selected.contains(metaCard.id),
               onChanged: onChanged,
             ),
           ),

@@ -1,5 +1,6 @@
 import 'package:flashcards_app/app.dart';
 import 'package:flashcards_app/src/algorithms/pick_cards.dart';
+import 'package:flashcards_app/src/algorithms/process_review.dart';
 import 'package:flashcards_app/src/backend/deck_data_access.dart';
 import 'package:flashcards_app/src/data/card.dart';
 import 'package:flashcards_app/src/frontend/card_display.dart';
@@ -9,17 +10,18 @@ import 'package:flashcards_app/src/frontend/screen.dart';
 import 'package:flashcards_app/src/frontend/visual_utils.dart';
 import 'package:flutter/material.dart';
 
-class ReviewScreen extends Screen<List<ReviewCard>> {
+class ReviewScreen extends Screen<List<MetaCard>> {
   final List<ReviewCard> reviewCards;
+  final ProcessReviewAlgo algo;
 
   /// constructor constructs
-  const ReviewScreen(this.reviewCards, {super.key});
+  const ReviewScreen(this.reviewCards, {super.key, required this.algo});
 
   @override
   createState() => _ReviewScreenState();
 }
 
-class _ReviewScreenState extends ScreenState<ReviewScreen, List<ReviewCard>> {
+class _ReviewScreenState extends ScreenState<ReviewScreen, List<MetaCard>> {
   // view state fields
   FlipPosition flipPosition = FlipPosition.unflipped;
 
@@ -39,7 +41,9 @@ class _ReviewScreenState extends ScreenState<ReviewScreen, List<ReviewCard>> {
   Future _backToDashboard() => lock(() async {
         // make sure the user is finished reviewing
         if (notDone.isEmpty) {
-          popRoute(done);
+          popRoute(
+            done.map((reviewCard) => reviewCard.metaCard).toList(),
+          );
           return;
         }
         // if not done, ask for permission
@@ -61,6 +65,7 @@ class _ReviewScreenState extends ScreenState<ReviewScreen, List<ReviewCard>> {
   _judge(bool gotCorrect) => lock(() async {
         notDone[0].timesSeen++;
         if (gotCorrect) {
+          widget.algo.process(notDone[0]);
           done.add(notDone[0]);
         } else {
           notDone.add(notDone[0]);

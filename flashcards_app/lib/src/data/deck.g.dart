@@ -7,9 +7,9 @@ part of flashcards_app.data.deck;
 // **************************************************************************
 
 Deck _$DeckFromJson(Map<String, dynamic> json) => Deck(
-      cards: (json['cards'] as List<dynamic>)
-          .map((e) => Card.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      cards: (json['cards'] as Map<String, dynamic>).map(
+        (k, e) => MapEntry(k, Card.fromJson(e as Map<String, dynamic>)),
+      ),
       tags: (json['tags'] as List<dynamic>).map((e) => e as String).toSet(),
     );
 

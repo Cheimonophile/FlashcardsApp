@@ -22,19 +22,19 @@ class _ReviewDashboardState extends State<_ReviewDashboard> {
   _review() => screen.lock(() async => screen
           .pushRoute(
         ReviewScreen(
-          widget.deckDao.pickCards(
-            PickCardsAlgo.lowestWeights(),
-            numCards: 2,
-            flipDirection: FlipDirection.front2back,
-          ),
-        ).route,
+                widget.deckDao.pickCards(
+                  PickCardsAlgo.lowestWeights(),
+                  numCards: 3,
+                  flipDirection: FlipDirection.front2back,
+                ),
+                algo: ProcessReviewAlgo.inverseProportionNumberSeen())
+            .route,
       )
           .then((reviewResult) {
         if (reviewResult == null) {
           return;
         }
-        widget.deckDao.processReview(
-            ProcessReviewAlgo.inverseProportionNumberSeen(), reviewResult);
+        widget.deckDao.updateCards(reviewResult);
       }));
 
   @override

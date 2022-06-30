@@ -16,7 +16,7 @@ class Card {
   static const double maxScore = 100;
 
   // data
-  final String frontText;
+  String frontText;
   String backText;
   double front2backScore;
   double back2frontScore;
@@ -36,13 +36,6 @@ class Card {
   // JSON functions
   factory Card.fromJson(Map<String, dynamic> json) => _$CardFromJson(json);
   Map<String, dynamic> toJson() => _$CardToJson(this);
-}
-
-/// stores a card along with some metadata
-class MetaCard {
-  final int index;
-  final Card card;
-  MetaCard(this.index, this.card);
 }
 
 /// Type for holding a review card

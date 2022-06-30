@@ -56,7 +56,7 @@ class _NewCardScreenState extends State<NewCardScreen> {
 
   /// saves the card
   save() {
-    widget.deckDao.addCard(card);
+    widget.deckDao.addCards([card]);
     frontTextController.clear();
     backTextController.clear();
   }

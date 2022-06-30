@@ -13,7 +13,7 @@ part 'deck.g.dart';
 class Deck {
 
   // fields
-  final List<Card> cards;
+  final Map<String, Card> cards;
   final Set<String> tags;
 
   // accessors
@@ -30,7 +30,7 @@ class Deck {
 
   /// empty constructor
   factory Deck.empty() => Deck(
-    cards: [],
+    cards: {},
     tags: {}
   );
 

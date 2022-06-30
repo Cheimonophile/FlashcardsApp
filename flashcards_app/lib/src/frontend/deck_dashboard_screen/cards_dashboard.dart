@@ -128,7 +128,7 @@ class _CardsDashboardState extends State<_CardsDashboard> {
 
 /// a controller for the cards table
 class CardsTableController {
-  final Set<int> _selected = {};
+  final Set<String> _selected = {};
   Function() _observer = () {};
 
   /// edit function calls the observer
@@ -139,12 +139,12 @@ class CardsTableController {
   }
 
   /// getters
-  Set<int> get selected => Set.unmodifiable(_selected);
+  Set<String> get selected => Set.unmodifiable(_selected);
 
   /// selected modifiers
-  addSelected(Iterable<int> newSelected) =>
+  addSelected(Iterable<String> newSelected) =>
       _edit(() => _selected.addAll(newSelected));
-  removeSelected(Iterable<int> oldSelected) =>
+  removeSelected(Iterable<String> oldSelected) =>
       _edit(() => _selected.removeAll(oldSelected));
   clearSelected() => _edit(() => _selected.clear());
 }
