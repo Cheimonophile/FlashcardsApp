@@ -12,13 +12,10 @@ class DeckDao {
   final Deck _deck;
   final String _path;
   final _rand = Random();
-  final _idLen = 8;
+  final _idLen = 16;
   // bool _edited = false;
 
   DeckDao(this._path, this._deck);
-
-  // getters
-  // bool get edited => _edited;
 
   // gets the cards in the deck as key value pairs
   List<MetaCard> cards() => _deck.cards
@@ -39,7 +36,7 @@ class DeckDao {
     String id;
     do {
       id = String.fromCharCodes(
-        List.generate(_idLen, (_) => _rand.nextInt(33) + 89),
+        List.generate(_idLen, (_) => _rand.nextInt(26) + 0x61),
       );
     } while (_deck.cards.containsKey(id));
     return id;
@@ -77,8 +74,7 @@ class DeckDao {
       {int? numCards, FlipDirection? flipDirection}) {
     numCards ??= _deck.cards.length;
     if (numCards > _deck.cards.length) {
-      throw Exception(
-          "Can't pick $numCards cards from a deck with only ${_deck.cards.length} cards");
+      numCards = _deck.cards.length;
     }
     return algo.pick(numCards, cards(), flipDirection).toList();
   }
@@ -91,6 +87,9 @@ class DeckDao {
 /// stores a card along with some metadata
 class MetaCard {
   final String id;
-  final Card card;
-  MetaCard(this.id, this.card);
+  Card _card;
+  MetaCard(this.id, this._card);
+  // card accessors
+  Card get card => _card.to();
+  set card(Card card) => _card = card;
 }

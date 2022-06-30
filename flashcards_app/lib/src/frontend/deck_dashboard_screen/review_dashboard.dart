@@ -14,6 +14,7 @@ class _ReviewDashboard extends StatefulWidget {
 
 class _ReviewDashboardState extends State<_ReviewDashboard> {
   List<ReviewCard> testCards = [];
+  int _TempNumReveiwCards = 20;
 
   /// get the screen
   _DeckDashboardScreenState get screen => widget.screen;
@@ -24,7 +25,7 @@ class _ReviewDashboardState extends State<_ReviewDashboard> {
         ReviewScreen(
                 widget.deckDao.pickCards(
                   PickCardsAlgo.lowestWeights(),
-                  numCards: 3,
+                  numCards: _TempNumReveiwCards,
                   flipDirection: FlipDirection.front2back,
                 ),
                 algo: ProcessReviewAlgo.inverseProportionNumberSeen())
@@ -60,10 +61,10 @@ class _ReviewDashboardState extends State<_ReviewDashboard> {
                   .map((testCard) => Row(children: [
                         Expanded(child: Text(testCard.metaCard.card.frontText)),
                         Expanded(child: Text(testCard.metaCard.card.backText)),
-                        Text(testCard.metaCard.card.front2backPercent
+                        Text(testCard.metaCard.card.front2backScore
                             .toString()),
                         const VerticalDivider(),
-                        Text(testCard.metaCard.card.back2frontPercent
+                        Text(testCard.metaCard.card.back2frontScore
                             .toString()),
                       ]))
                   .toList(),

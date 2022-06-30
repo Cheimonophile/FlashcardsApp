@@ -50,13 +50,13 @@ class _CardRow extends StatelessWidget {
                           Container(
                             decoration: BoxDecoration(
                               borderRadius: Util.borderRadius,
-                              color: metaCard.card.front2backPercent.color,
+                              color: metaCard.card.front2backScore.color,
                             ),
                             child: Padding(
                               padding: const EdgeInsets.all(4.0),
                               child: Center(
                                 child: Text(
-                                  metaCard.card.front2backPercent
+                                  metaCard.card.front2backScore
                                       .formatPercent(),
                                   textAlign: TextAlign.center,
                                   style: const TextStyle(color: Colors.black)
@@ -81,13 +81,13 @@ class _CardRow extends StatelessWidget {
                           Container(
                             decoration: BoxDecoration(
                               borderRadius: Util.borderRadius,
-                              color: metaCard.card.back2frontPercent.color,
+                              color: metaCard.card.back2frontScore.color,
                             ),
                             child: Padding(
                               padding: const EdgeInsets.all(4.0),
                               child: Center(
                                 child: Text(
-                                  metaCard.card.back2frontPercent
+                                  metaCard.card.back2frontScore
                                       .formatPercent(),
                                   textAlign: TextAlign.center,
                                   style: const TextStyle(color: Colors.black)

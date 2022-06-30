@@ -6,6 +6,7 @@ import 'package:flashcards_app/src/data/card.dart';
 import 'package:flashcards_app/src/frontend/card_display.dart';
 import 'package:flashcards_app/src/frontend/dialogs.dart';
 import 'package:flashcards_app/src/frontend/nav_bar.dart';
+import 'package:flashcards_app/src/frontend/score_extension.dart';
 import 'package:flashcards_app/src/frontend/screen.dart';
 import 'package:flashcards_app/src/frontend/visual_utils.dart';
 import 'package:flutter/material.dart';
@@ -158,7 +159,7 @@ class _ReviewProgressBar extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: done
                   .map((reviewCard) => Expanded(
-                      child: ColoredBox(color: reviewCard.score.percent.color)))
+                      child: ColoredBox(color: reviewCard.score.color)))
                   .toList() +
               notDone
                   .map((reviewCard) => const Expanded(

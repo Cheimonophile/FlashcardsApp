@@ -17,6 +17,22 @@ class ProcessReviewAlgo {
       ProcessReviewAlgo._((reviewCard) {
         var oldScore = reviewCard.score;
         var newScore = (oldScore * (newWeightDivisor - 1) + Card.maxScore / reviewCard.timesSeen) / newWeightDivisor;
-        reviewCard.score = newScore;
+        reviewCard._score = newScore;
       });
+}
+
+/// Type for holding a review card
+class ReviewCard {
+  int timesSeen = 0;
+  final MetaCard metaCard;
+  final FlipDirection flipDirection;
+  ReviewCard(this.metaCard, this.flipDirection);
+
+  // score accessors abstract card direction
+  double get score => flipDirection == FlipDirection.front2back
+      ? metaCard.card.front2backScore
+      : metaCard.card.back2frontScore;
+  set _score(double newScore) => flipDirection == FlipDirection.front2back
+      ? metaCard.card = metaCard.card.to(front2backScore: newScore)
+      : metaCard.card = metaCard.card.to(front2backScore: newScore);
 }

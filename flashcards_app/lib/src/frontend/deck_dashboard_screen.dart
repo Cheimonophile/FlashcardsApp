@@ -12,6 +12,7 @@ import 'package:flashcards_app/src/frontend/card_display.dart';
 import 'package:flashcards_app/src/frontend/dialogs.dart';
 import 'package:flashcards_app/src/frontend/new_card_screen.dart';
 import 'package:flashcards_app/src/frontend/review_screen.dart';
+import 'package:flashcards_app/src/frontend/score_extension.dart';
 import 'package:flashcards_app/src/frontend/screen.dart';
 import 'package:flashcards_app/src/frontend/visual_utils.dart';
 import 'package:flutter/material.dart';
