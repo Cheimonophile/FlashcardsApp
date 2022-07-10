@@ -151,23 +151,56 @@ class _ReviewProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: Util.borderRadius,
-      child: Container(
-        constraints: const BoxConstraints(minHeight: 16.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: done
-                  .map((reviewCard) => Expanded(
-                      child: ColoredBox(color: reviewCard.score.color)))
-                  .toList() +
-              notDone
-                  .map((reviewCard) => const Expanded(
-                        child: ColoredBox(color: Colors.grey),
-                      ))
-                  .toList(),
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        Container(
+          constraints: const BoxConstraints(minHeight: 16.0),
+          decoration: BoxDecoration(
+            border: Border.all(),
+            borderRadius: Util.borderRadius,
+          ),
+          child: ClipRRect(
+            borderRadius: Util.borderRadius,
+            child: const ColoredBox(color: Colors.grey),
+          ),
         ),
-      ),
+        Row(
+          children: [
+            Expanded(
+              flex: done.length,
+              child: Container(
+                constraints: const BoxConstraints(minHeight: 16.0),
+                decoration: BoxDecoration(
+                  border: done.isEmpty ? null : Border.all(),
+                  borderRadius: Util.borderRadius,
+                ),
+                child: ClipRRect(
+                    borderRadius: Util.borderRadius,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: done
+                          .map((reviewCard) => Expanded(
+                                child: ColoredBox(
+                                  color: reviewCard.score.color,
+                                ),
+                              ))
+                          .toList(),
+                    )),
+              ),
+            ),
+            Expanded(
+              flex: notDone.length,
+              child: Container(),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
+
+// extension _ReviewCard on ReviewCard {
+//   Color get reviewColor =>
+//       timesSeen == 0 ? Colors.transparent : (1 / timesSeen).color;
+// }
