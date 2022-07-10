@@ -11,9 +11,12 @@ Deck _$DeckFromJson(Map<String, dynamic> json) => Deck(
         (k, e) => MapEntry(k, Card.fromJson(e as Map<String, dynamic>)),
       ),
       tags: (json['tags'] as List<dynamic>).map((e) => e as String).toSet(),
+      cardsPerReview:
+          json['cardsPerReview'] as int? ?? Deck.defaultCardsPerReview,
     );
 
 Map<String, dynamic> _$DeckToJson(Deck instance) => <String, dynamic>{
       'cards': instance.cards,
       'tags': instance.tags.toList(),
+      'cardsPerReview': instance.cardsPerReview,
     };

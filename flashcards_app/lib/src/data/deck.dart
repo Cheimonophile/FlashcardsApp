@@ -12,9 +12,13 @@ part 'deck.g.dart';
 @JsonSerializable()
 class Deck {
 
+  // static fields
+  static const defaultCardsPerReview = 10;
+
   // fields
   final Map<String, Card> cards;
   final Set<String> tags;
+  int cardsPerReview;
 
   // accessors
   // Deck get clone => Deck(
@@ -26,6 +30,7 @@ class Deck {
   Deck({
     required this.cards,
     required this.tags,
+    this.cardsPerReview = Deck.defaultCardsPerReview,
   });
 
   /// empty constructor

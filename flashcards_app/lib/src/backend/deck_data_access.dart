@@ -31,6 +31,14 @@ class DeckDao {
     return result;
   }
 
+  /// general getters
+  int get cardsPerReview => _deck.cardsPerReview;
+
+  /// general setters
+  set cardsPerReview(int newCardsPerReview) => _edit((){
+    _deck.cardsPerReview = newCardsPerReview;
+  });
+
   /// generates a new id for a card
   String _generateCardID() {
     String id;

@@ -13,14 +13,33 @@ class _ReviewDashboard extends StatefulWidget {
 }
 
 class _ReviewDashboardState extends State<_ReviewDashboard> {
-  List<ReviewCard> testCards = [];
-  int get _numReveiwCards => int.tryParse(cardsPerReviewController.text) ?? 0;
+  int get numReveiwCards =>
+      int.tryParse(_cardsPerReviewController.text) ??
+      Deck.defaultCardsPerReview;
 
   // controllers
-  TextEditingController cardsPerReviewController = TextEditingController(text: "0");
+  final TextEditingController _cardsPerReviewController =
+      TextEditingController(text: Deck.defaultCardsPerReview.toString());
 
   /// get the screen
   _DeckDashboardScreenState get screen => widget.screen;
+
+  @override
+  void initState() {
+    _cardsPerReviewController.text = widget.deckDao.cardsPerReview.toString();
+    _cardsPerReviewController.addListener(() => setState(() {
+          widget.deckDao.cardsPerReview =
+              int.tryParse(_cardsPerReviewController.text) ??
+                  Deck.defaultCardsPerReview;
+        }));
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _cardsPerReviewController.dispose();
+    super.dispose();
+  }
 
   /// function called to start reviewing cards
   _review() => screen.lock(() async => screen
@@ -28,7 +47,7 @@ class _ReviewDashboardState extends State<_ReviewDashboard> {
         ReviewScreen(
                 widget.deckDao.pickCards(
                   PickCardsAlgo.lowestWeights(),
-                  numCards: _numReveiwCards,
+                  numCards: numReveiwCards,
                   flipDirection: FlipDirection.front2back,
                 ),
                 algo: ProcessReviewAlgo.inverseProportionNumberSeen())
@@ -70,13 +89,11 @@ class _ReviewDashboardState extends State<_ReviewDashboard> {
                     ),
                     Expanded(
                         child: TextFormField(
-                          controller: cardsPerReviewController,
-                          decoration: Util.textInputDecoration,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            Util.numberInputFormatter
-                          ],
-                        )),
+                      controller: _cardsPerReviewController,
+                      decoration: Util.textInputDecoration,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [Util.numberInputFormatter],
+                    )),
                   ]),
                   const Divider(),
                 ]),
