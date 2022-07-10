@@ -1,6 +1,7 @@
 library flashcards_app.frontend.visual_utils;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 abstract class Util {
@@ -13,6 +14,16 @@ abstract class Util {
     padding: EdgeInsets.all(8.0),
     child: Center(child: Text("<To Do>")),
   );
+
+  static InputDecoration textInputDecoration = const InputDecoration(
+    filled: true,
+    border: OutlineInputBorder(),
+    contentPadding: EdgeInsets.all(8.0),
+    isDense: true,
+    hintText: "0",
+  );
+
+  static TextInputFormatter get numberInputFormatter => _NumberInputFormatter();
 
   static InputDecoration searchDecoration = const InputDecoration(
     prefixIcon: Icon(Icons.search),
@@ -39,4 +50,20 @@ abstract class Util {
 
   // standard border radius
   static final BorderRadius borderRadius = BorderRadius.circular(4.0);
+}
+
+class _NumberInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    String text = newValue.text;
+    text = text.replaceAll(RegExp(r"\D"), ""); // remove non digits
+    text = (int.tryParse(text) ?? 0).toString();
+    return TextEditingValue(
+      text: text,
+      selection: TextSelection.collapsed(offset: text.length),
+    );
+  }
 }

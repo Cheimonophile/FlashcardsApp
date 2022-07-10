@@ -14,7 +14,10 @@ class _ReviewDashboard extends StatefulWidget {
 
 class _ReviewDashboardState extends State<_ReviewDashboard> {
   List<ReviewCard> testCards = [];
-  int _TempNumReveiwCards = 20;
+  int get _numReveiwCards => int.tryParse(cardsPerReviewController.text) ?? 0;
+
+  // controllers
+  TextEditingController cardsPerReviewController = TextEditingController(text: "0");
 
   /// get the screen
   _DeckDashboardScreenState get screen => widget.screen;
@@ -25,7 +28,7 @@ class _ReviewDashboardState extends State<_ReviewDashboard> {
         ReviewScreen(
                 widget.deckDao.pickCards(
                   PickCardsAlgo.lowestWeights(),
-                  numCards: _TempNumReveiwCards,
+                  numCards: _numReveiwCards,
                   flipDirection: FlipDirection.front2back,
                 ),
                 algo: ProcessReviewAlgo.inverseProportionNumberSeen())
@@ -57,18 +60,26 @@ class _ReviewDashboardState extends State<_ReviewDashboard> {
           // main area
           Expanded(
             child: Column(
-              children: testCards
-                  .map((testCard) => Row(children: [
-                        Expanded(child: Text(testCard.metaCard.card.frontText)),
-                        Expanded(child: Text(testCard.metaCard.card.backText)),
-                        Text(testCard.metaCard.card.front2backScore
-                            .toString()),
-                        const VerticalDivider(),
-                        Text(testCard.metaCard.card.back2frontScore
-                            .toString()),
-                      ]))
-                  .toList(),
-            ),
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // number of cards to review
+                  Row(children: [
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text("Cards per Review:"),
+                    ),
+                    Expanded(
+                        child: TextFormField(
+                          controller: cardsPerReviewController,
+                          decoration: Util.textInputDecoration,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            Util.numberInputFormatter
+                          ],
+                        )),
+                  ]),
+                  const Divider(),
+                ]),
           ),
         ],
       );
