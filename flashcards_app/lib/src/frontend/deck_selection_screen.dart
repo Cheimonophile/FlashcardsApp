@@ -26,8 +26,8 @@ class _DeckSelectionScreenState extends ScreenState<DeckSelectionScreen, dynamic
   _DeckSelectionScreenState();
 
   @override
-  Set<ScreenShortcut> shortcuts = {};
-
+  Map<SingleActivator, Function()> shortcuts = {};
+  
   /// callback when a file is dragged into the frame
   ///
   /// Returns a Widget that should be pushed onto the navigator

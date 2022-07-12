@@ -44,7 +44,7 @@ class _DeckDashboardScreenState extends ScreenState<DeckDashboardScreen, dynamic
   int pageIndex = 0;
 
   @override
-  Set<ScreenShortcut> shortcuts = {};
+  Map<SingleActivator, Function()> shortcuts = {};
 
   // controllers
   CardsTableController cardsTableController = CardsTableController();

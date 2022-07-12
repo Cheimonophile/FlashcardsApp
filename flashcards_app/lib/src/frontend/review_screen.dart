@@ -41,8 +41,10 @@ class _ReviewScreenState extends ScreenState<ReviewScreen, List<MetaCard>> {
 
   // keyboard shortcuts
   @override
-  late final Set<ScreenShortcut> shortcuts = {
-    ScreenShortcut(const SingleActivator(LogicalKeyboardKey.space), _flip),
+  late Map<SingleActivator, Function()> shortcuts = {
+    const SingleActivator(LogicalKeyboardKey.space): _flip,
+    const SingleActivator(LogicalKeyboardKey.digit1): () => _judge(false),
+    const SingleActivator(LogicalKeyboardKey.digit4): () => _judge(true),
   };
 
   /// makes all modifications to the cards and returns them with pop

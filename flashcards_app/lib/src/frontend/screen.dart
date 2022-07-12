@@ -25,8 +25,8 @@ abstract class Screen<ScreenResult> extends StatefulWidget
 /// class includes a bunch of would-be boilerplate for
 abstract class ScreenState<ScreenType extends Screen<ScreenResult>,
     ScreenResult> extends State<ScreenType> {
-  // a list of shortcuts for the screen
-  Iterable<ScreenShortcut> get shortcuts;
+  /// a list of shortcuts for the screen
+  Map<SingleActivator, Function()> get shortcuts;
 
   /// function that locks the ui while performing operations
   ///
@@ -72,13 +72,11 @@ abstract class ScreenState<ScreenType extends Screen<ScreenResult>,
   @nonVirtual
   Widget build(BuildContext context) => IgnorePointer(
         ignoring: disabled > 0,
-        child: Shortcuts(
-          shortcuts: {
-            for (final shortcut in shortcuts) shortcut.activator: shortcut
-          },
-          child: Actions(
-            dispatcher: LoggingActionDispatcher(),
-            actions: {ScreenShortcut: _ScreenAction()},
+        child: CallbackShortcuts(
+          bindings: shortcuts,
+          child: Focus(
+            autofocus: true,
+            canRequestFocus: false,
             child: buildScreen(context),
           ),
         ), // needs to be scaffold
@@ -87,7 +85,6 @@ abstract class ScreenState<ScreenType extends Screen<ScreenResult>,
   /// builds the screen
   Scaffold buildScreen(BuildContext context);
 }
-
 
 /// An ActionDispatcher that logs all the actions that it invokes.
 class LoggingActionDispatcher extends ActionDispatcher {
