@@ -10,6 +10,7 @@ import 'package:flashcards_app/src/frontend/score_extension.dart';
 import 'package:flashcards_app/src/frontend/screen.dart';
 import 'package:flashcards_app/src/frontend/visual_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class ReviewScreen extends Screen<List<MetaCard>> {
   final List<ReviewCard> reviewCards;
@@ -38,6 +39,12 @@ class _ReviewScreenState extends ScreenState<ReviewScreen, List<MetaCard>> {
     super.initState();
   }
 
+  // keyboard shortcuts
+  @override
+  late final Set<ScreenShortcut> shortcuts = {
+    ScreenShortcut(const SingleActivator(LogicalKeyboardKey.space), _flip),
+  };
+
   /// makes all modifications to the cards and returns them with pop
   Future _backToDashboard() => lock(() async {
         // make sure the user is finished reviewing
@@ -59,20 +66,24 @@ class _ReviewScreenState extends ScreenState<ReviewScreen, List<MetaCard>> {
 
   /// flips the current card
   _flip() => lock(() async {
-        flipPosition = FlipPosition.flipped;
+        if(flipPosition == FlipPosition.unflipped) {
+          flipPosition = FlipPosition.flipped;
+        }
       });
 
   /// judges the card and moves to the next
   _judge(bool gotCorrect) => lock(() async {
-        notDone[0].timesSeen++;
-        if (gotCorrect) {
-          widget.algo.process(notDone[0]);
-          done.add(notDone[0]);
-        } else {
-          notDone.add(notDone[0]);
+        if (flipPosition == FlipPosition.flipped) {
+          notDone[0].timesSeen++;
+          if (gotCorrect) {
+            widget.algo.process(notDone[0]);
+            done.add(notDone[0]);
+          } else {
+            notDone.add(notDone[0]);
+          }
+          notDone.removeAt(0);
+          flipPosition = FlipPosition.unflipped;
         }
-        notDone.removeAt(0);
-        flipPosition = FlipPosition.unflipped;
       });
 
   /// Respond to button presses

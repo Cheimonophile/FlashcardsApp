@@ -25,6 +25,8 @@ abstract class Screen<ScreenResult> extends StatefulWidget
 /// class includes a bunch of would-be boilerplate for
 abstract class ScreenState<ScreenType extends Screen<ScreenResult>,
     ScreenResult> extends State<ScreenType> {
+  // a list of shortcuts for the screen
+  Iterable<ScreenShortcut> get shortcuts;
 
   /// function that locks the ui while performing operations
   ///
@@ -70,18 +72,44 @@ abstract class ScreenState<ScreenType extends Screen<ScreenResult>,
   @nonVirtual
   Widget build(BuildContext context) => IgnorePointer(
         ignoring: disabled > 0,
-        child: buildScreen(context), // needs to be scaffold
+        child: Shortcuts(
+          shortcuts: {
+            for (final shortcut in shortcuts) shortcut.activator: shortcut
+          },
+          child: Actions(
+            dispatcher: LoggingActionDispatcher(),
+            actions: {ScreenShortcut: _ScreenAction()},
+            child: buildScreen(context),
+          ),
+        ), // needs to be scaffold
       );
 
   /// builds the screen
   Scaffold buildScreen(BuildContext context);
 }
 
+
+/// An ActionDispatcher that logs all the actions that it invokes.
+class LoggingActionDispatcher extends ActionDispatcher {
+  @override
+  Object? invokeAction(
+    covariant Action<Intent> action,
+    covariant Intent intent, [
+    BuildContext? context,
+  ]) {
+    print('Action invoked: $action($intent) from $context');
+    super.invokeAction(action, intent, context);
+
+    return null;
+  }
+}
+
 /// carries around screen functions so they can be passed to children
 class ScreenDelegate<ScreenResult> {
   Future<T> Function<T>(Future<T> Function() f) lock;
   Future<PushScreenResult?> Function<PushScreenResult>(
-      MaterialPageRoute<PushScreenResult> route) pushRoute;
+    MaterialPageRoute<PushScreenResult> route,
+  ) pushRoute;
   Function([ScreenResult? result]) popRoute;
   ScreenDelegate({
     required this.lock,
@@ -90,3 +118,15 @@ class ScreenDelegate<ScreenResult> {
   });
 }
 
+/// class for storing screen shortcuts
+class ScreenShortcut extends Intent {
+  final SingleActivator activator;
+  final Function() invoke;
+  const ScreenShortcut(this.activator, this.invoke);
+}
+
+class _ScreenAction extends Action<ScreenShortcut> {
+  _ScreenAction();
+  @override
+  void invoke(ScreenShortcut intent) => intent.invoke();
+}

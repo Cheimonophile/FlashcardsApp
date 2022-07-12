@@ -70,7 +70,7 @@ class _ReviewDashboardState extends State<_ReviewDashboard> {
               children: [
                 OutlinedButton(
                   onPressed: _review,
-                  child: Text("Review"),
+                  child: const Text("Review"),
                 )
               ],
             ),
@@ -88,12 +88,13 @@ class _ReviewDashboardState extends State<_ReviewDashboard> {
                       child: Text("Cards per Review:"),
                     ),
                     Expanded(
-                        child: TextFormField(
-                      controller: _cardsPerReviewController,
-                      decoration: Util.textInputDecoration,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [Util.numberInputFormatter],
-                    )),
+                      child: TextFormField(
+                        controller: _cardsPerReviewController,
+                        decoration: Util.textInputDecoration,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [Util.numberInputFormatter],
+                      ),
+                    ),
                   ]),
                   const Divider(),
                 ]),

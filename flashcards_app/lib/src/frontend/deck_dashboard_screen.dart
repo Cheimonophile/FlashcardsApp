@@ -43,6 +43,9 @@ class _DeckDashboardScreenState extends ScreenState<DeckDashboardScreen, dynamic
   late String fileName = path.basename(File(widget.path).path);
   int pageIndex = 0;
 
+  @override
+  Set<ScreenShortcut> shortcuts = {};
+
   // controllers
   CardsTableController cardsTableController = CardsTableController();
 
